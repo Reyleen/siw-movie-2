@@ -17,23 +17,17 @@
   </div>
 </header>
 <div><a href="/"><img src="/images/logo-siw.png" width="50%"/></a></div>
-<h1 th:text="'Attori del film ' + ${movie.title}"></h1>
-<div th:if="${movie.actors.isEmpty()}">Non ci sono attori per questo film</div>
+<h1 th:text="'Recensioni del film' + ${movie.title}"></h1>
+<div th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
 <ul>
-  <li th:each="actor : ${movie.actors}">
-    <span th:text="${actor.name}+' '+${actor.surname}"></span>
-    <a th:href="@{'/admin/removeActorFromMovie/'+ ${actor.id}+'/'+${movie.id}}">Cancella</a>
+  <li th:each="review : ${movie.reviews}">
+    <span th:text="${review.title}"></span>
+    <span th:text="${review.text}"></span>
+    <div class="mt-5"><strong th:text="${review.rating}"></strong></div>
+    <span th:text="${review.user.name}"></span>
+    <a th:href="@{'/admin/removeReviewFromMovie/'+ ${review.id}+'/'+${movie.id}}">Cancella</a>
   </li>
 </ul>
-<div>
-  Attori che si possono aggiungere:
-  <ul>
-    <li th:each="actor : ${actorsToAdd}">
-      <span th:text="${actor.name}+' '+${actor.surname}"></span>
-      <a th:href="@{'/admin/addActorToMovie/'+ ${actor.id}+'/'+${movie.id}}">Aggiungi</a>
-    </li>
-  </ul>
-  <div>
     <div>
       <a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button type="button">Fine</button></a>
     </div>

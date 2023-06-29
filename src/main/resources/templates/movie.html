@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Film</title>
+  <link rel="stylesheet" href="/css/stile.css"/>
 </head>
+
 <body>
-$END$
+<header>
+  <div th:if="${#request.userPrincipal}">
+    <span th:text="${#request.userPrincipal.principal.username}"></span>
+    <a href="/logout">Logout</a>
+  </div>
+  <div th:unless="${#request.userPrincipal}">
+    <a href="/login">Login</a>
+  </div>
+</header>
+
+<div><a href="/"><img src="/images/logo-siw.png" width="50%"/></a></div>
+<h1>Dettagli Film</h1>
+<div th:if="${movie}">
+  <span th:text="${movie.title}">Up!</span>
+  <span th:text="'(' + ${movie.year} + ')'">2000</span>
+  <span><img width="5%" th:src=${movie.urlImage}/></span>
+
+  <h2>Registi:</h2>
+  <div th:if="${movie.director}">
+    <span th:text="${movie.director.name} + ' ' +${movie.director.surname}">Pippo</span>
+  </div>
+  <div th:unless="${movie.director}">
+    <p>Nessun regista per questo film</p>
+  </div>
+  <div>
+    <h2>Attori:</h2>
+    <div th:if="${movie.actors.isEmpty()}">Non ci sono attori per questo film</div>
+    <ul>
+      <li th:each="actor : ${movie.actors}">
+        <span th:text="${actor.name}+' '+${actor.surname}"></span>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <h2>Recensioni:</h2>
+    <div th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
+    <ul>
+      <li th:each="review : ${movie.reviews}">
+        <span th:text="${review.title}"></span>
+        <span th:text="${review.text}"></span>
+        <div class="mt-5"><strong th:text="${review.rating}"></strong></div>
+        <span th:text="${review.user.name}"></span>
+      </li>
+    </ul>
+  </div>
+  <a th:href="@{'/addReviewToMovie/' + ${movie.id}}">Aggiungi Recensione</a>
+
+
+  <!--<div>Attori:</div>
+  <ul>
+      <li th:each="actor : ${movie.actors}">
+          <span th:text="${actor.name}+' '+${actor.surname}"></span>
+      </li>
+  </ul>
+  <div>Registi:</div>
+  <ul>
+      <li th:each="director : ${movie.directors}">
+          <span th:text="${director.name}+' '+${director.surname}"></span>
+      </li>
+  </ul>
+  <div th:text="'Recensioni di ' + ${movie.title}"></div>
+  <ul>
+      <div th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
+      <li th:each="review : ${movie.reviews}">
+          <span th:text="${review.title}"></span>
+          <div class="mt-5"><strong th:text="${review.rating}"></strong></div>
+          <span th:text="${review.user.name}"></span>
+      </li>
+  </ul>-->
+
+</div>
+<div th:unless="${movie}">Non esiste</div>
 </body>
 </html>

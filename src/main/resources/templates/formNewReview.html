@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Recensioni</title>
+  <title>Recensione</title>
   <link rel="stylesheet" href="/css/stile.css"/>
 </head>
 
@@ -16,7 +16,40 @@
     <a href="/login">Login</a>
   </div>
 </header>
-<form th:action="@{/movie/recensione}" method="POST" th:object="${review}" class="mt-5">
+<form th:action="@{/review/{movieId}(movieId=${movie.id})}" th:object="${review}" method="post">
+  <div>
+    <label>Title:</label>
+    <input type="text" name="title">
+  </div>
+  <div>
+    <label>Text:</label>
+    <textarea name="text"></textarea>
+  </div>
+  <div>
+    <label>Rating:</label>
+    <input type="number" name="rating">
+  </div>
+  <input type="submit" value="Add Review">
+</form>
+<!---<form th:action="@{/addReviewToMovie/{movieId}(movieId=${movie.id})}" th:object="${review}" method="post">
+  <div>
+    <label>Title:</label>
+    <input type="text" th:field="*{title}">
+    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+  </div>
+  <div>
+    <label>Text:</label>
+    <textarea th:field="*{text}"></textarea>
+    <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></span>
+  </div>
+  <div>
+    <label>Rating:</label>
+    <input type="number" th:field="*{rating}">
+    <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></span>
+  </div>
+  <input type="submit" value="Add Review">
+</form>-->
+<!--<form th:action="@{'/addReviewToMovie/'+${movieId}}" method="POST" th:object="${review}" class="mt-5">
   <div th:if="${#fields.hasGlobalErrors()}">
     <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
   </div>
@@ -24,23 +57,22 @@
   <div>
     <label>Titolo:</label>
     <span><input type="text" th:field="${review.title}"/></span>
-    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
-		    </span>
+    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
   </div>
-
-  <!--<div>
-      <label>Voto:</label>
-      <span> <input value="0" type="hidden" th:field="${review.rating}" data-glyphicon="0"></span>
-  </div>-->
 
   <div>
-    <textarea class="form-control" th:field="*{review.text}" rows="3"></textarea>
+    <label>Voto:</label>
+    <span><input type="text" th:field="${review.rating}" /></span>
+    <span th:if="${#fields.hasErrors('rate')}" th:errors="*{rating}"></span>
   </div>
 
+  <div>Descrizione:
+    <textarea class="form-control" th:field="*{review.text}" rows="3"></textarea>
+  </div>
   <div>
     <span><button type="submit">Conferma</button></span>
   </div>
-</form>
+</form>-->
 </body>
 
 </html>

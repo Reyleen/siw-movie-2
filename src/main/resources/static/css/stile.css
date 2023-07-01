@@ -1,9 +1,11 @@
 body {
-    font-family: "Geneva";
-    color:dimgrey;
+    font-family: 'Raleway', sans-serif;
+    background-color: #111;
+    color: floralwhite;
+    align-items: center;
 }
 
-a {
+  a {
     text-decoration: none;
     color: darkgrey;
 }
@@ -18,16 +20,80 @@ label {
 }
 
 header {
-    background-color: rgb(98, 192, 144);
+    background-color: rgba(180, 6, 12, 0.8);
     color: white;
-    height: 1.5em;
+    height: 2em;
     margin-bottom: 0.5em;
     padding: 0.2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    flex-grow: 2; /* Permette all'elemento di occupare lo spazio disponibile */
+}
+
+.menu {
+    margin-right: auto; /* Spinge l'elemento a sinistra verso destra */
+}
+
+.login {
     text-align: right;
+    margin-left: auto; /* Spinge l'elemento "login" tutto a destra */
+    margin-right: 10px;
+    width: 200px;
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    mix-blend-mode: color-burn;
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+}
+
+.menu ul li {
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.search-bar input[type="text"] {
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 1px solid lavender;
+    font-size: 13px;
+    outline: none;
 }
 
 header a {
     text-decoration: none;
     color: white;
-    font-size: 0.6em;
+    font-size: 13px;
+}
+
+.movieImage img {
+    width: 50%;
+    height: auto;
 }

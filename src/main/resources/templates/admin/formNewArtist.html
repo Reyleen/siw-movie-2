@@ -10,14 +10,44 @@
 
 <body>
 <header>
-  <div th:if="${#request.userPrincipal}">
-    <span th:text="${#request.userPrincipal.principal.username}"></span>
-    <a href="/logout">Logout</a>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+  </style>
+  <script>
+    function submitForm() {
+      var form = document.querySelector('form');
+      form.submit();
+    }
+  </script>
+  <div class="header-left">
+    <div class="logo">
+      <img src="/images/logo1.png" width="50%" />
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/">Home</a> </li>
+        <li><a href="/movie">Film</a></li>
+        <li><a href="/artist">Artisti</a></li>
+      </ul>
+    </div>
   </div>
-  <div th:unless="${#request.userPrincipal}">
-    <a href="/login">Login</a>
+  <div class="header-right">
+    <div class="search-bar">
+      <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+        <img src="/images/search-heart.svg">
+        <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
+      </form>
+    </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <div class="login">
+    <div th:if="${#request.userPrincipal}">
+      <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
+      <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${#request.userPrincipal}">
+      <a href="/login">Login</a>
+    </div>
+  </div>
 </header>
 
 <div><a href="/"><img src="/images/logo-siw.png" width="50%"/></a></div>

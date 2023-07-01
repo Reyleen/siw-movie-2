@@ -78,12 +78,11 @@ public class ReviewService {
         Credentials credentials = credentialsService.getCredentials(user.getUsername());
         review.setMovie(movie);
         review.setUser(credentials.getUser());
+        credentials.getUser().getMoviesReviewed().add(movie);
         this.reviewRepository.save(review);
-
+        credentials.getUser().getReviews().add(review);
         movie.getReviews().add(review);
-
         this.movieRepository.save(movie);
-
         return review;
     }
 

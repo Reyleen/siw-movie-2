@@ -27,7 +27,11 @@ public class Artist {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
-    private String urlOfPicture;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfDeath;
+
+    private byte[] image;
 
     @ManyToMany(mappedBy="actors")
     private Set<Movie> starredMovies;
@@ -72,12 +76,20 @@ public class Artist {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getUrlOfPicture() {
-        return urlOfPicture;
+    public LocalDate getDateOfDeath() {
+        return dateOfDeath;
     }
 
-    public void setUrlOfPicture(String urlOfPicture) {
-        this.urlOfPicture = urlOfPicture;
+    public void setDateOfDeath(LocalDate dateOfDeath) {
+        this.dateOfDeath = dateOfDeath;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Set<Movie> getActorOf() {

@@ -1,5 +1,7 @@
 package it.uniroma3.siw.model;
 
+import org.springframework.lang.Nullable;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +27,9 @@ public class Movie {
     @Max(2023)
     private Integer year;
 
-    private String urlImage;
+
+    @Nullable
+    private byte[] image;
 
     @ManyToOne
     private Artist director;
@@ -37,6 +41,7 @@ public class Movie {
     private Set<Review> reviews;
 
     public Movie() {
+        this.actors = new HashSet<>();
         this.reviews = new HashSet<>();
     }
 
@@ -64,12 +69,13 @@ public class Movie {
         this.year = year;
     }
 
-    public String getUrlImage() {
-        return urlImage;
+    @Nullable
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
+    public void setImage(@Nullable byte[] image) {
+        this.image = image;
     }
 
     public Artist getDirector() {

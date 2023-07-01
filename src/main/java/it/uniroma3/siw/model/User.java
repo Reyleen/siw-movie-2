@@ -19,6 +19,9 @@ public class User {
     @OneToMany
     private List<Review> reviews;
 
+    @OneToMany
+    private Set<Movie> moviesReviewed;
+
     public User() {
         reviews = new ArrayList<>();
     }
@@ -61,5 +64,13 @@ public class User {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public Set<Movie> getMoviesReviewed() {
+        return moviesReviewed;
+    }
+
+    public void setMoviesReviewed(Set<Movie> moviesReviewed) {
+        this.moviesReviewed = moviesReviewed;
     }
 }

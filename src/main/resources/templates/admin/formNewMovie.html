@@ -17,10 +17,11 @@
     <div th:unless="${#request.userPrincipal}">
         <a href="/login">Login</a>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </header>
-<div><a href="/static"><img src="/images/logo-siw.png" width="50%"/></a></div>
+<div><a href="/static"><img src="/images/logo-siw.png" width="50%" /></a></div>
 <h1>Aggiungi un film</h1>
-<form th:action="@{/admin/movie}" method="POST" th:object="${movie}">
+<form th:action="@{/admin/movie}" method="POST" th:object="${movie}" enctype = "multipart/form-data" >
     <div th:if="${#fields.hasGlobalErrors()}">
         <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
     </div>
@@ -39,12 +40,30 @@
     </div>
 
     <div>
-        <label>URL immagine:</label> <span><input type="text" th:field="${movie.urlImage}" /></span>
+        <label>Immagine:</label>
+        <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
     </div>
+    <div> <img id="thumbnail" alt="Logo Preview" |>
+    </div>
+    <script type = "text/javascript">
+        $(document).ready(function() {
+            $('#fileImage').change(function() {
+                showImageThumbnail(this);
+            });
+        });
 
-    <div>
-        <span><button type="submit">Conferma</button></span>
-    </div>
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#thumbnail').attr('src', e.target.result)
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <span><button type="submit">Conferma</button></span>
 </form>
 </body>
 

@@ -8,6 +8,10 @@ import it.uniroma3.siw.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +30,13 @@ public class MovieService {
     @Autowired
     private ReviewService reviewService;
 
-//    @Transactional
-//    public void addMovie(@Valid Movie movie) {
-//        this.movieRepository.save(movie);
-//    }
+  @Transactional
+  public void createNewMovie(@Valid Movie movie, MultipartFile file) throws IOException {
+
+      byte[] bytes = file.getBytes();
+      movie.setImage(bytes);
+       this.movieRepository.save(movie);
+   }
 
     public Movie getMovieById(Long id) {
         return this.movieRepository.findById(id).get();
@@ -45,6 +52,10 @@ public class MovieService {
 
     public List<Movie> getMoviesByYear(int year) {
         return this.movieRepository.findByYear(year);
+    }
+
+    public List<Movie> getMoviesByTitle(String title) {
+        return this.movieRepository.findByTitle(title);
     }
 
     @Transactional

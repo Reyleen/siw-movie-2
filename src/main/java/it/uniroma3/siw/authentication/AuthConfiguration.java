@@ -20,23 +20,15 @@ import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
 @EnableWebSecurity
 public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
-    /**
-     * La sorgente dati (che contiene le credenziali) è
-     * iniettata automaticamente
-     */
     @Autowired
     DataSource datasource;
 
-    /**
-     * Questo metodo contiene le impostazioni della configurazione
-     * di autenticatzione e autorizzazione.
-     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/movie","/movie/**","/artist","/artist/**","/", "/index", "/login", "/register", "/css/**", "/images/**", "favicon.ico").permitAll()
-                .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/formSearchMovies","/movie","/movie/**","/artist","/artist/**","/", "/index", "/login", "/register", "/css/**", "/images/**", "favicon.ico").permitAll()
+                .antMatchers(HttpMethod.POST, "/login", "/register","/searchMovies").permitAll()
                 .antMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .anyRequest().authenticated()

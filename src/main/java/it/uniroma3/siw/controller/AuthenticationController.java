@@ -2,6 +2,7 @@ package it.uniroma3.siw.controller;
 
 import javax.validation.Valid;
 
+import it.uniroma3.siw.controller.validator.CredentialValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,9 @@ public class AuthenticationController {
 
     @Autowired
     private CredentialsService credentialsService;
+
+    @Autowired
+    private CredentialValidator credentialsValidator;
 
     @GetMapping(value = "/register")
     public String showRegisterForm (Model model) {
@@ -70,6 +74,7 @@ public class AuthenticationController {
                                BindingResult credentialsBindingResult,
                                Model model) {
 
+       // credentialsValidator.validate(credentials, credentialsBindingResult);
         if(!userBindingResult.hasErrors() && ! credentialsBindingResult.hasErrors()) {
             credentials.setUser(user);
             credentialsService.saveCredentials(credentials);

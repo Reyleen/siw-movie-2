@@ -19,7 +19,7 @@
 <div><a href="/static"><img src="/images/logo-siw.png" width="50%"/></a></div>
 <h1>Cerca film per anno</h1>
 <form th:action="@{/searchMovies}" method="post">
-  <div>Anno: <input type="text" th:value="${year}" name="year" />
+  <div>Titolo <input type="text" th:value="${title}" name="title" />
   </div>
   <div><input type="submit" /></div>
 </form>

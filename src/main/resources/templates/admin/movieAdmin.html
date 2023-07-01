@@ -21,7 +21,7 @@
 <div th:if="${movie}">
   <span th:text="${movie.title}">Up!</span>
   <span th:text="'(' + ${movie.year} + ')'">2000</span>
-<span><img width="5%" th:src="'data:image/jpeg;base64,' + ${image}"/></span>
+  <!--  <span><img width="5%" th:src=${movie.urlImage}/></span> --->
 
   <h2>Registi:</h2>
   <div th:if="${movie.director}">
@@ -51,7 +51,7 @@
       </li>
     </ul>
   </div>
-  <a th:href="@{'/addReviewToMovie/' + ${movie.id}}">Aggiungi Recensione</a>
+  //<a th:href="@{'/addReviewToMovie/' + ${movie.id}}">Aggiungi Recensione</a>
 
 
   <!--<div>Attori:</div>

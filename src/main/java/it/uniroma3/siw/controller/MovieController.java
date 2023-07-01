@@ -1,16 +1,19 @@
 package it.uniroma3.siw.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 
-import it.uniroma3.siw.model.Review;
+import it.uniroma3.siw.model.*;
 import it.uniroma3.siw.repository.ReviewRepository;
 import it.uniroma3.siw.service.MovieService;
 import it.uniroma3.siw.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,11 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.controller.validator.ReviewValidator;
-import it.uniroma3.siw.model.Artist;
-import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.service.CredentialsService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class MovieController {
@@ -59,6 +61,26 @@ public class MovieController {
         return "admin/formNewMovie.html";
     }
 
+    @PostMapping("admin/movie")
+    public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,  Model model,
+                           @RequestParam("image")MultipartFile multipartFile) throws IOException {
+
+        this.movieValidator.validate(movie, bindingResult);
+        if (!bindingResult.hasErrors()){
+            this.movieService.createNewMovie(movie, multipartFile);
+            byte[] photo = movie.getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
+            model.addAttribute("movie", movie);
+            return "movie.html";
+        } else {
+            return "admin/formNewMovie.html";
+
+        }
+    }
+
     @GetMapping(value="/admin/formUpdateMovie/{id}")
     public String formUpdateMovie(@PathVariable("id") Long id, Model model) {
         model.addAttribute("movie", movieRepository.findById(id).get());
@@ -74,6 +96,12 @@ public class MovieController {
     public String manageMovies(Model model) {
         model.addAttribute("movies", this.movieRepository.findAll());
         return "admin/manageMovies.html";
+    }
+
+    @GetMapping("/admin/removeMovie/{movieId}")
+    public String deleteMovie(@PathVariable("movieId")Long movieId, Model model) {
+        this.movieService.deleteMovie(movieId);
+        return "redirect:/admin/manageMovies";
     }
 
     @GetMapping(value="/admin/setDirectorToMovie/{directorId}/{movieId}")
@@ -96,22 +124,17 @@ public class MovieController {
         return "admin/directorsToAdd.html";
     }
 
-    @PostMapping("/admin/movie")
-    public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult, Model model) {
 
-        this.movieValidator.validate(movie, bindingResult);
-        if (!bindingResult.hasErrors()) {
-            this.movieRepository.save(movie);
-            model.addAttribute("movie", movie);
-            return "movie.html";
-        } else {
-            return "admin/formNewMovie.html";
-        }
-    }
 
     @GetMapping("/movie/{id}")
     public String getMovie(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("movie", this.movieRepository.findById(id).get());
+        Movie movie = this.movieRepository.findById(id).get();
+        byte[] photo = movie.getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
+        model.addAttribute("movie", movie);
         return "movie.html";
     }
 
@@ -132,8 +155,8 @@ public class MovieController {
     }
 
     @PostMapping("/searchMovies")
-    public String searchMovies(Model model, @RequestParam int year) {
-        model.addAttribute("movies", this.movieRepository.findByYear(year));
+    public String searchMovies(Model model, @RequestParam String title) {
+        model.addAttribute("movies", this.movieRepository.findByTitle(title));
         return "foundMovies.html";
     }
 
@@ -173,18 +196,24 @@ public class MovieController {
 
     @PostMapping("/review/{movieId}")
     public String newReview(@Valid @ModelAttribute("review") Review review, @PathVariable("movieId") Long movieId, BindingResult bindingResult, Model model) {
-        this.reviewValidator.validate(review, bindingResult);
-        Review newReview = this.reviewService.newReview(review, movieId);
-        if (!bindingResult.hasErrors()) {
+        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+        User user = credentials.getUser();
+        Movie m = movieRepository.findById(movieId).get();
+        Set<Movie>movies = user.getMoviesReviewed();
+        if(!movies.contains(m)){
+            Review newReview = this.reviewService.newReview(review, movieId);
             Movie movie = this.movieService.addReviewToMovie(movieId, newReview.getId());
             model.addAttribute(newReview);
             model.addAttribute(movie);
             return "movie.html";
         } else {
+            model.addAttribute("messaggioErrore", "Hai già scritto una recensione per questo film!");
             model.addAttribute("movie", this.movieService.getMovieById(movieId));
             return "formNewReview.html";
         }
     }
+
 
     @GetMapping("/admin/updateReviews/{movieId}")
     public String updateReviews(@PathVariable("movieId") Long movieId, Model model) {

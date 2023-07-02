@@ -30,6 +30,24 @@ public class ArtistService {
     }
 
     @Transactional
+    public void updateArtist(@Valid Artist a1, @Valid Artist a2,MultipartFile file) throws IOException {
+        if(a2.getSurname()!=null)
+            a1.setSurname(a2.getSurname());
+        if(a2.getName()!=null)
+            a1.setName(a2.getName());
+        if(a2.getDateOfBirth()!=null)
+            a1.setDateOfBirth(a2.getDateOfBirth());
+        if(a2.getDateOfDeath()!=null)
+            a1.setDateOfDeath(a2.getDateOfDeath());
+        if (file != null  && !file.isEmpty())
+        {
+            byte[] bytes = file.getBytes();
+            a1.setImage(bytes);
+        }
+        this.artistRepository.save(a1);
+    }
+
+    @Transactional
     public Iterable<Artist> getAllArtists() {
         return this.artistRepository.findAll();
     }

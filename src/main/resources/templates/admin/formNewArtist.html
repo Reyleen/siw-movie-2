@@ -10,6 +10,7 @@
 
 <body>
 <header>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
   </style>
@@ -33,10 +34,10 @@
   </div>
   <div class="header-right">
     <div class="search-bar">
-      <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+      <!--<form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
         <img src="/images/search-heart.svg">
         <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
-      </form>
+      </form>-->
     </div>
   </div>
   <div class="login">
@@ -75,32 +76,33 @@
 
   <div>
     <label>Immagine:</label>
-    <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
+    <span><input type="file" name="image" id="fileImage" accept="image/*" /></span>
   </div>
-  <div> <img id="thumbnail" alt="Logo Preview" |>
+  <div> <img id="thumbnail" alt="Logo Preview"/>
   </div>
-  <script type = "text/javascript">
-    $(document).ready(function() {
-      $('#fileImage').change(function() {
-        showImageThumbnail(this);
-      });
-    });
-
-    function showImageThumbnail(fileInput) {
-      file = fileInput.files[0];
-      reader = new FileReader();
-
-      reader.onload = function(e) {
-        $('#thumbnail').attr('src', e.target.result)
-      };
-
-      reader.readAsDataURL(file);
-    }
-  </script>
   <div>
     <span><button type="submit">Conferma</button></span>
   </div>
 </form>
+
+<script type = "text/javascript">
+  $(document).ready(function() {
+    $('#fileImage').change(function() {
+      showImageThumbnail(this);
+    });
+  });
+
+  function showImageThumbnail(fileInput) {
+    file = fileInput.files[0];
+    reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#thumbnail').attr('src', e.target.result)
+    };
+
+    reader.readAsDataURL(file);
+  }
+</script>
 </body>
 
 </html>

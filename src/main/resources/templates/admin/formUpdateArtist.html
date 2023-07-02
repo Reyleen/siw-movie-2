@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        New Movie
+        Modifica Artista
     </title>
     <link rel="stylesheet" href="/css/stile.css" />
 </head>
@@ -51,33 +51,31 @@
     </div>
 </header>
 <div><a href="/static"><img src="/images/logo-siw.png" width="50%" /></a></div>
-<h1>Aggiungi un film</h1>
-<form th:action="@{/admin/movie}" method="POST" th:object="${movie}" enctype = "multipart/form-data" >
-    <div th:if="${#fields.hasGlobalErrors()}">
-        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
-    </div>
+<h1>Modifica Artista</h1>
+<form th:action="'/admin/updateArtist/' + ${artist.id}"  method="POST" th:object="${artist2}" enctype = "multipart/form-data" >
     <div>
         <span th:text="${messaggioErrore}">Errore</span>
     </div>
-
     <div>
-        <label>Titolo:</label>
-        <span><input type="text" th:field="${movie.title}" /></span>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
-		    </span>
+        <label>Nome:</label> <span><input required type="text" th:field="${artist2.name}" /></span>
     </div>
 
     <div>
-        <label>Anno:</label> <span><input type="text" th:field="${movie.year}" /></span>
-        <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}">
-		    </span>
+        <label>Cognome:</label> <span><input required type="text" th:field="${artist2.surname}" /></span>
     </div>
 
+    <div>
+        <label>Data di nascita:</label> <span><input type="date" th:field="${artist2.dateOfBirth}" /></span>
+    </div>
+
+    <div>
+        <label>Data di morte (se mort*):</label> <span><input type="date" th:field="${artist2.dateOfDeath}" /></span>
+    </div>
     <div>
         <label>Immagine:</label>
-        <span><input type="file" name="image" id="fileImage" accept="image/*" /></span>
+        <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
     </div>
-    <div> <img id="thumbnail" alt="Logo Preview"/>
+    <div> <img id="thumbnail" alt="Logo Preview" |>
     </div>
     <script type = "text/javascript">
         $(document).ready(function() {
@@ -97,7 +95,7 @@
             reader.readAsDataURL(file);
         }
     </script>
-    <span><button type="submit">Conferma</button></span>
+    <span><button type="submit">Modifica</button></span>
 </form>
 </body>
 

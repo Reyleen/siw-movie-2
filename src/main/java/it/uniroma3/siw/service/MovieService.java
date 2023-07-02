@@ -32,10 +32,22 @@ public class MovieService {
 
   @Transactional
   public void createNewMovie(@Valid Movie movie, MultipartFile file) throws IOException {
-
       byte[] bytes = file.getBytes();
       movie.setImage(bytes);
        this.movieRepository.save(movie);
+   }
+
+   @Transactional
+   public void updateMovie(@Valid Movie m1, @Valid Movie m2, MultipartFile file) throws IOException{
+      if(m2.getTitle() != null)
+                  m1.setTitle(m2.getTitle());
+      if(m2.getYear() != null)
+        m1.setYear(m2.getYear());
+      if (file != null  && !file.isEmpty()) {
+          byte[] bytes = file.getBytes();
+          m1.setImage(bytes);
+      }
+        this.movieRepository.save(m1);
    }
 
     public Movie getMovieById(Long id) {

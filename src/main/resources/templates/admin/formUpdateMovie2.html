@@ -2,12 +2,15 @@
 <html>
 
 <head>
-  <title>Film</title>
+  <title>
+    Modifica Film
+  </title>
   <link rel="stylesheet" href="/css/stile.css" />
 </head>
 
 <body>
 <header>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
   </style>
@@ -47,16 +50,48 @@
     </div>
   </div>
 </header>
+<div><a href="/static"><img src="/images/logo-siw.png" width="50%" /></a></div>
+<h1>Modifica Film</h1>
+<form th:action="'/admin/formUpdateMovie/' + ${movie.id}"  method="POST" th:object="${movie2}" enctype = "multipart/form-data" >
+  <div>
+    <span th:text="${messaggioErrore}">Errore</span>
+  </div>
 
-<div><a href="/"><img src="/images/logo-siw.png" width="50%" /></a></div>
-<h1>Film</h1>
-<div th:if="${movies.isEmpty()}">Non ci sono film nel sistema</div>
-<ul>
-  <li th:each="movie : ${movies}">
-    <span th:text="${movie.title} + ' (' + ${movie.year} + ')'">Up! (2000)</span>
-    <a th:href="@{'/admin/formUpdateMovie' + '/' + ${movie.id}}">Aggiorna</a>
-  </li>
-</ul>
+  <div>
+    <label>Titolo:</label>
+    <span><input type="text" th:field="${movie2.title}" /></span>
+  </div>
+
+  <div>
+    <label>Anno:</label> <span><input type="text" th:field="${movie2.year}" /></span>
+  </div>
+
+  <div>
+    <label>Immagine:</label>
+    <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
+  </div>
+  <div> <img id="thumbnail" alt="Logo Preview" |>
+  </div>
+  <script type = "text/javascript">
+    $(document).ready(function() {
+      $('#fileImage').change(function() {
+        showImageThumbnail(this);
+      });
+    });
+
+    function showImageThumbnail(fileInput) {
+      file = fileInput.files[0];
+      reader = new FileReader();
+
+      reader.onload = function(e) {
+        $('#thumbnail').attr('src', e.target.result)
+      };
+
+      reader.readAsDataURL(file);
+    }
+  </script>
+  <span><button type="submit">Conferma</button></span>
+</form>
 </body>
 
 </html>

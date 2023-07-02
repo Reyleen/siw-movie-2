@@ -65,8 +65,9 @@ public class MovieController {
     public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,  Model model,
                            @RequestParam("image")MultipartFile multipartFile) throws IOException {
 
-        this.movieValidator.validate(movie, bindingResult);
-        if (!bindingResult.hasErrors()){
+        //this.movieValidator.validate(movie, bindingResult);
+        if (movie.getTitle()!=null && movie.getYear()!=null
+                && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
             this.movieService.createNewMovie(movie, multipartFile);
             byte[] photo = movie.getImage();
             if(photo != null) {
@@ -76,12 +77,41 @@ public class MovieController {
             model.addAttribute("movie", movie);
             return "movie.html";
         } else {
+            model.addAttribute("messaggioErrore", "Questo film esiste già");
             return "admin/formNewMovie.html";
-
         }
     }
 
-    @GetMapping(value="/admin/formUpdateMovie/{id}")
+    @GetMapping(value="/admin/formMovieUpdate/{movieId}")
+    public String manageMovie(@PathVariable("movieId") Long id ,Model model) {
+        model.addAttribute("movie", this.movieRepository.findById(id).get());
+        model.addAttribute("movie2", new Movie());
+        return "admin/formUpdateMovie2.html";
+    }
+
+    @PostMapping(value="/admin/formUpdateMovie/{id}")
+    public String formMovieUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("movie2") Movie movie, BindingResult bindingResult, Model model,
+                                  @RequestParam("image") MultipartFile multipartFile) throws IOException  {
+        Movie toUpdate = this.movieRepository.findById(id).get();
+        if (movie.getTitle()!=null && movie.getYear()!=null
+                && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
+            this.movieService.updateMovie(toUpdate, movie, multipartFile);
+            /*byte[] photo = movie.getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }*/
+            model.addAttribute("movie", movie);
+            return "admin/formUpdateMovie.html";
+
+        } else {
+            model.addAttribute("messaggioErrore", "Questo film esiste già");
+            model.addAttribute("movie", movieRepository.findById(id).get());
+            return "admin/formUpdateMovie2.html";
+        }
+    }
+
+    @GetMapping (value="/admin/formUpdateMovie/{id}")
     public String formUpdateMovie(@PathVariable("id") Long id, Model model) {
         model.addAttribute("movie", movieRepository.findById(id).get());
         return "admin/formUpdateMovie.html";
@@ -116,15 +146,12 @@ public class MovieController {
         return "admin/formUpdateMovie.html";
     }
 
-
     @GetMapping(value="/admin/addDirector/{id}")
     public String addDirector(@PathVariable("id") Long id, Model model) {
         model.addAttribute("artists", artistRepository.findAll());
         model.addAttribute("movie", movieRepository.findById(id).get());
         return "admin/directorsToAdd.html";
     }
-
-
 
     @GetMapping("/movie/{id}")
     public String getMovie(@PathVariable("id") Long id, Model model) {

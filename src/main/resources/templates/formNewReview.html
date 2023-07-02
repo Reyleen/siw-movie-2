@@ -3,7 +3,7 @@
 
 <head>
   <title>Recensione</title>
-  <link rel="stylesheet" href="/css/stile.css"/>
+  <link rel="stylesheet" href="/css/reviewStyle.css"/>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
   </script>
   <div class="header-left">
     <div class="logo">
-      <img src="/images/logo1.png" width="50%" />
+      <img src="/images/logoSIW2.png" width="50%" />
     </div>
     <div class="menu">
       <ul>
@@ -47,24 +47,18 @@
     </div>
   </div>
 </header>
-<form th:action="@{/review/{movieId}(movieId=${movie.id})}" th:object="${review}" method="post">
-  <div>
+<div class="login-container">
+  <img src="/images/logoSIW2.png" class="logo">
+  <h1>Recensione</h1>
+  <form th:action="@{/review/{movieId}(movieId=${movie.id})}" th:object="${review}" method="post">
     <span th:text="${messaggioErrore}">Errore</span>
-  </div>
-  <div>
-    <label>Title:</label>
-    <input type="text" name="title">
-  </div>
-  <div>
-    <label>Text:</label>
-    <textarea name="text"></textarea>
-  </div>
-  <div>
-    <label>Rating:</label>
+    <input type="text" name="title" placeholder="Titolo" style="font-family: 'Raleway', sans-serif">
+    <textarea style="font-family: 'Raleway', sans-serif" name="text"></textarea>
     <input required type="number" min="1" max="5" step="1" name="rating">
-  </div>
-  <input type="submit" value="Add Review">
-</form>
+    <button type="submit" style="font-family: 'Raleway', sans-serif" >Conferma</button>
+  </form>
+</div>
+
 
 </body>
 

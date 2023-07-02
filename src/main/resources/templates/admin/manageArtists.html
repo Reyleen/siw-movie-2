@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Film</title>
+  <title>Modifica Artista</title>
   <link rel="stylesheet" href="/css/stile.css" />
 </head>
 
@@ -19,13 +19,16 @@
   </script>
   <div class="header-left">
     <div class="logo">
-      <img src="/images/logo1.png" width="50%" />
+      <img src="/images/logoSIW2.png" width="50%" />
     </div>
     <div class="menu">
       <ul>
         <li><a href="/">Home</a> </li>
         <li><a href="/movie">Film</a></li>
         <li><a href="/artist">Artisti</a></li>
+        <li>&#124</li>
+        <li><a href="/admin/indexMovie">Modifica Film</a></li>
+        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
       </ul>
     </div>
   </div>
@@ -48,15 +51,17 @@
   </div>
 </header>
 
-<div><a href="/"><img src="/images/logo-siw.png" width="50%" /></a></div>
-<h1>Artisti</h1>
-<div th:if="${artists.isEmpty()}">Non ci sono artisti nel sistema</div>
-<ul>
-  <li th:each="artist : ${artists}">
-    <span th:text="${artist.name}  + ${artist.surname} ">nome cognome</span>
-    <a th:href="@{'/admin/updateArtist' + '/' + ${artist.id}}">Aggiorna</a>
-  </li>
-</ul>
+<h1 style="color: #e50914">Modifica Artisti</h1>
+<div th:if="${artists==null || artists.isEmpty()}">Non ci sono artisti nel sistema</div>
+<div class="artistGrid">
+  <div class="artistGridItem" th:each="artist, iStat : ${artists}">
+    <a th:href="@{'/admin/updateArtist' + '/' + ${artist.id}}" >
+      <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${artist.name}"/>
+      <h5 th:text="${artist.name} + ' ' + ${artist.surname}"></h5>
+    </a>
+  </div>
+</div>
+
 </body>
 
 </html>

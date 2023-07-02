@@ -6,6 +6,12 @@
     SiwMovie - Homepage
   </title>
   <link rel="stylesheet" href="/css/stile.css" />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -21,13 +27,16 @@
   </script>
   <div class="header-left">
     <div class="logo">
-      <img src="/images/logo1.png" width="50%" />
+      <img src="/images/logoSIW2.png" width="50%" />
     </div>
     <div class="menu">
       <ul>
         <li><a href="/">Home</a> </li>
         <li><a href="/movie">Film</a></li>
         <li><a href="/artist">Artisti</a></li>
+        <li>&#124</li>
+        <li><a href="/admin/indexMovie">Modifica Film</a></li>
+        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
       </ul>
     </div>
   </div>
@@ -50,24 +59,51 @@
   </div>
 </header>
 
-<div><img src="/images/logo-siw.png" width="50%" /></div>
-<h1>Consulta l'archivio</h1>
-<div>
-  <a href="/movie">Elenco Film</a>
+<div class="x">
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" th:each="movie, iStat : ${movies}">
+        <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+        <h5 th:href="@{/movie/{id}(id=${movie.id})}" th:text="${movie.title}"></h5>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
 </div>
-<div>
-  <a href="/artist">Elenco Artisti</a>
+<div class="movieGrid">
+  <div class="movieGridItem" th:each="movie, iStat : ${movies}">
+    <a th:href="@{/movie/{id}(id=${movie.id})}">
+      <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+      <h5 th:text="${movie.title}"></h5>
+    </a>
+  </div>
 </div>
-<div>
-  <a href="/formSearchMovies">Cerca film</a>
-</div>
-<h1>Operazioni per amministratore</h1>
-<div>
-  <a href="/admin/indexMovie">Operazioni sui film</a>
-</div>
-<div>
-  <a href="/admin/indexArtist">Operazioni sugli artisti</a>
-</div>
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    autoplay: true,
+    loop: true,
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+</script>
 </body>
 
 </html>

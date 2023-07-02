@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        New Movie
+        Update Movie
     </title>
     <link rel="stylesheet" href="/css/stile.css"/>
 </head>
@@ -21,13 +21,16 @@
     </script>
     <div class="header-left">
         <div class="logo">
-            <img src="/images/logo1.png" width="50%"/>
+            <img src="/images/logoSIW2.png" width="50%"/>
         </div>
         <div class="menu">
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/movie">Film</a></li>
                 <li><a href="/artist">Artisti</a></li>
+                <li>&#124</li>
+                <li><a href="/admin/indexMovie">Modifica Film</a></li>
+                <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
             </ul>
         </div>
     </div>
@@ -51,7 +54,6 @@
     </div>
 </header>
 
-<div><a href="/"><img src="/images/logo-siw.png" width="50%"/></a></div>
 <h1>Modifica Film</h1>
 <div th:if="${movie}">
     <div>

@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ArtistController {
@@ -36,6 +38,13 @@ public class ArtistController {
 
     @GetMapping(value = "/admin/manageArtists")
     public String manageArtist(Model model) {
+        List<Artist> artists = new ArrayList<>();
+        artistRepository.findAll().forEach(artists::add);
+        String[] images = new String[artists.size()];
+        for(int i = 0; i < artists.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(artists.get(i).getImage());
+        }
+        model.addAttribute("images", images);
         model.addAttribute("artists", this.artistRepository.findAll());
         return "admin/manageArtists.html";
     }
@@ -78,6 +87,13 @@ public class ArtistController {
 
     @GetMapping("/artist")
     public String getArtists(Model model) {
+        List<Artist> artists = new ArrayList<>();
+        artistRepository.findAll().forEach(artists::add);
+        String[] images = new String[artists.size()];
+        for(int i = 0; i < artists.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(artists.get(i).getImage());
+        }
+        model.addAttribute("images", images);
         model.addAttribute("artists", this.artistRepository.findAll());
         return "artists.html";
     }

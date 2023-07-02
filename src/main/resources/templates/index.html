@@ -6,11 +6,17 @@
         SiwMovie2 - Homepage
     </title>
     <link rel="stylesheet" href="/css/stile.css" />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
 </head>
 
 <body>
 <header>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
     </style>
@@ -22,7 +28,7 @@
     </script>
     <div class="header-left">
         <div class="logo">
-            <img src="/images/logo1.png" width="50%" />
+            <img src="/images/logoSIW2.png" width="50%" />
         </div>
         <div class="menu">
             <ul>
@@ -50,7 +56,51 @@
             </div>
     </div>
 </header>
-
+<div class="x">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="movie, iStat : ${movies}">
+                <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+                <h5 th:href="@{/movie/{id}(id=${movie.id})}" th:text="${movie.title}"></h5>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+<div class="movieGrid">
+        <div class="movieGridItem" th:each="movie, iStat : ${movies}">
+            <a th:href="@{/movie/{id}(id=${movie.id})}">
+                <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+                <h5 th:text="${movie.title}"></h5>
+            </a>
+        </div>
+</div>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        autoplay: true,
+        loop: true,
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
 </body>
 
 </html>

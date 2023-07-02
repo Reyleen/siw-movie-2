@@ -28,7 +28,6 @@ public class Movie {
     private Integer year;
 
 
-    @Nullable
     private byte[] image;
 
     @ManyToOne

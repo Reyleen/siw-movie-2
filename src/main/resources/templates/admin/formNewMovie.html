@@ -5,7 +5,10 @@
     <title>
         New Movie
     </title>
-    <link rel="stylesheet" href="/css/stile.css" />
+    <link rel="stylesheet" href="/css/reviewStyle.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -22,13 +25,16 @@
     </script>
     <div class="header-left">
         <div class="logo">
-            <img src="/images/logo1.png" width="50%" />
+            <img src="/images/logoSIW2.png" width="50%" />
         </div>
         <div class="menu">
             <ul>
                 <li><a href="/">Home</a> </li>
                 <li><a href="/movie">Film</a></li>
                 <li><a href="/artist">Artisti</a></li>
+                <li>&#124</li>
+                <li><a href="/admin/indexMovie">Modifica Film</a></li>
+                <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
             </ul>
         </div>
     </div>
@@ -50,35 +56,28 @@
         </div>
     </div>
 </header>
-<div><a href="/static"><img src="/images/logo-siw.png" width="50%" /></a></div>
-<h1>Aggiungi un film</h1>
-<form th:action="@{/admin/movie}" method="POST" th:object="${movie}" enctype = "multipart/form-data" >
-    <div th:if="${#fields.hasGlobalErrors()}">
-        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
-    </div>
-    <div>
+<div class="login-container">
+    <img src="/images/logoSIW2.png" class="logo">
+    <h1>Aggiungi un film</h1>
+    <form class="formMovie" th:action="@{/admin/movie}" method="POST" th:object="${movie}" enctype = "multipart/form-data" >
+        <span th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+        </span>
         <span th:text="${messaggioErrore}">Errore</span>
-    </div>
+        <input type="text" placeholder="Titolo" th:field="${movie.title}" style="font-family: 'Raleway', sans-serif" />
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+        <input type="text" placeholder="Anno" th:field="${movie.year}" style="font-family: 'Raleway', sans-serif" />
+        <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+        <div class="mb-3">
+            <input class="form-control" type="file" name="image" id="fileImage" accept="image/*"/>
+        </div>
+        <div> <img id="thumbnail" alt="Logo Preview"/></div>
+        <div>
+            <button type="submit">Conferma</button>
+        </div>
+    </form>
+</div>
 
-    <div>
-        <label>Titolo:</label>
-        <span><input type="text" th:field="${movie.title}" /></span>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
-		    </span>
-    </div>
-
-    <div>
-        <label>Anno:</label> <span><input type="text" th:field="${movie.year}" /></span>
-        <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}">
-		    </span>
-    </div>
-
-    <div>
-        <label>Immagine:</label>
-        <span><input type="file" name="image" id="fileImage" accept="image/*" /></span>
-    </div>
-    <div> <img id="thumbnail" alt="Logo Preview"/>
-    </div>
     <script type = "text/javascript">
         $(document).ready(function() {
             $('#fileImage').change(function() {
@@ -97,8 +96,6 @@
             reader.readAsDataURL(file);
         }
     </script>
-    <span><button type="submit">Conferma</button></span>
-</form>
 </body>
 
 </html>

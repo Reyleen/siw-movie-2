@@ -96,11 +96,6 @@ public class MovieController {
         if (movie.getTitle()!=null && movie.getYear()!=null
                 && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
             this.movieService.updateMovie(toUpdate, movie, multipartFile);
-            /*byte[] photo = movie.getImage();
-            if(photo != null) {
-                String image = java.util.Base64.getEncoder().encodeToString(photo);
-                model.addAttribute("image", image);
-            }*/
             model.addAttribute("movie", movie);
             return "admin/formUpdateMovie.html";
 
@@ -124,6 +119,13 @@ public class MovieController {
 
     @GetMapping(value="/admin/manageMovies")
     public String manageMovies(Model model) {
+        List<Movie> movies = new ArrayList<>();
+        movieRepository.findAll().forEach(movies::add);
+        String[] images = new String[movies.size()];
+        for(int i = 0; i < movies.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
+        }
+        model.addAttribute("images", images);
         model.addAttribute("movies", this.movieRepository.findAll());
         return "admin/manageMovies.html";
     }
@@ -171,6 +173,13 @@ public class MovieController {
     	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
 */
+        List<Movie> movies = new ArrayList<>();
+        movieRepository.findAll().forEach(movies::add);
+        String[] images = new String[movies.size()];
+        for(int i = 0; i < movies.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
+        }
+        model.addAttribute("images", images);
         model.addAttribute("movies", this.movieRepository.findAll());
         //model.addAttribute("user", credentials.getUser());
         return "movies.html";
@@ -184,6 +193,13 @@ public class MovieController {
     @PostMapping("/searchMovies")
     public String searchMovies(Model model, @RequestParam String title) {
         model.addAttribute("movies", this.movieRepository.findByTitle(title));
+        List<Movie> movies = new ArrayList<>();
+        movieRepository.findByTitle(title).forEach(movies::add);
+        String[] images = new String[movies.size()];
+        for(int i = 0; i < movies.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
+        }
+        model.addAttribute("images", images);
         return "foundMovies.html";
     }
 
@@ -231,6 +247,11 @@ public class MovieController {
         if(!movies.contains(m)){
             Review newReview = this.reviewService.newReview(review, movieId);
             Movie movie = this.movieService.addReviewToMovie(movieId, newReview.getId());
+            byte[] photo = movie.getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
             model.addAttribute(newReview);
             model.addAttribute(movie);
             return "movie.html";

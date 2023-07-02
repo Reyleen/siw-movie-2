@@ -18,7 +18,7 @@
   </script>
   <div class="header-left">
     <div class="logo">
-      <img src="/images/logo1.png" width="50%" />
+      <img src="/images/logoSIW2.png" width="50%" />
     </div>
     <div class="menu">
       <ul>
@@ -47,30 +47,32 @@
   </div>
 </header>
 
-<div th:if="${movie}">
-  <h1 th:text="${movie.title}">Dettagli Film</h1>
-  <h2 th:text="'movie | (' + ${movie.year} + ')'">2000</h2>
+<div class="showMovie" th:if="${movie}">
+  <h1 style="color: #e50914" th:text="${movie.title}">Dettagli Film</h1>
+  <h2 th:text="'movie | '+ ${movie.year} ">2000</h2>
   <div class="movieImage">
     <img width="5%" th:src="'data:image/jpeg;base64,' + ${image}"/>
   </div>
-  <h2>Registi:</h2>
-  <div th:if="${movie.director}">
-    <span th:text="${movie.director.name} + ' ' +${movie.director.surname}">Pippo</span>
+  <div class="movieInfoGrid">
+    <div><h2 style="color: #e50914">Regista:</h2>
+        <div th:if="${movie.director}">
+          <a th:href="@{'/artist/' + ${movie.director.id}}" th:text="${movie.director.name} + ' ' +${movie.director.surname}">Pippo</a>
+        </div>
+        <div th:unless="${movie.director}">
+            <p>Nessun regista per questo film</p>
+        </div>
+    </div>
+    <div>
+        <h2 style="color: #e50914">Attori del film:</h2>
+        <div th:if="${movie.actors.isEmpty()}">Non ci sono attori per questo film</div>
+        <p th:each="actor : ${movie.actors}">
+            <a th:href="@{'/artist/' + ${actor.id}}" th:text="${actor.name}+' '+${actor.surname}"></a>
+        </p>
+    </div>
   </div>
-  <div th:unless="${movie.director}">
-    <p>Nessun regista per questo film</p>
-  </div>
+
   <div>
-    <h2>Attori:</h2>
-    <div th:if="${movie.actors.isEmpty()}">Non ci sono attori per questo film</div>
-    <ul>
-      <li th:each="actor : ${movie.actors}">
-        <span th:text="${actor.name}+' '+${actor.surname}"></span>
-      </li>
-    </ul>
-  </div>
-  <div>
-    <h2>Recensioni:</h2>
+    <h2 style="color: #e50914">Recensioni:</h2>
     <div th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
     <ul>
       <li th:each="review : ${movie.reviews}">

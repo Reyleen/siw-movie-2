@@ -1,5 +1,5 @@
 body {
-    background-image: image-set("/images/background2.jpg" );
+    background-image: image-set("/images/background2.jpg");
     background-size: cover;
     font-family: 'Raleway', sans-serif;
     display: flex;
@@ -27,7 +27,6 @@ body {
 .logo {
     width: 150px;
     margin-bottom: 20px;
-    mix-blend-mode: color-burn;
 }
 
 h1 {

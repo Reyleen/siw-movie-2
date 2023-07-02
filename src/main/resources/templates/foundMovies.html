@@ -19,7 +19,7 @@
   </script>
   <div class="header-left">
     <div class="logo">
-      <img src="/images/logo1.png" width="50%" />
+      <img src="/images/logoSIW2.png" width="50%" />
     </div>
     <div class="menu">
       <ul>
@@ -48,15 +48,17 @@
   </div>
 </header>
 
-<div><a href="/"><img src="/images/logo-siw.png" width="50%"/></a></div>
 <h1>Film che soddisfano i requisiti</h1>
 <div th:if="${movies.isEmpty()}">Non ci sono film che soddisfano i requisiti</div>
-<ul th:if="${!movies.isEmpty()}">
-  <li th:each="movie : ${movies}">
-    <a href="movie.html" th:href="@{'/movie' + '/' + ${movie.id}}"
-       th:text="${movie.title} + ' (' + ${movie.year}+')'">Up! (2000)</a>
-  </li>
-</ul>
+<div class="movieGrid">
+  <div class="movieGridItem" th:each="movie, iStat : ${movies}">
+    <a th:href="@{/movie/{id}(id=${movie.id})}">
+      <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+      <h5 th:text="${movie.title} + '|' + ${movie.year}"></h5>
+    </a>
+  </div>
+</div>
+
 </body>
 
 </html>

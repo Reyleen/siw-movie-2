@@ -32,11 +32,6 @@ public class ArtistController {
         return "admin/formNewArtist.html";
     }
 
-    @GetMapping(value = "/admin/indexArtist")
-    public String indexArtist() {
-        return "admin/indexArtist.html";
-    }
-
     @GetMapping(value = "/admin/manageArtists")
     public String manageArtist(Model model) {
         List<Artist> artists = new ArrayList<>();

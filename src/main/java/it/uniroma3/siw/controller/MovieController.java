@@ -132,11 +132,6 @@ public class MovieController {
         return "admin/formUpdateMovie.html";
     }
 
-    @GetMapping(value="/admin/indexMovie")
-    public String indexMovie() {
-        return "admin/indexMovie.html";
-    }
-
     @GetMapping(value="/admin/manageMovies")
     public String manageMovies(Model model) {
         List<Movie> movies = new ArrayList<>();

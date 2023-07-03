@@ -82,7 +82,7 @@
     </div>
     <div class="movie-reviews">
         <div class="review"></div>
-        <a th:href="@{'/admin/updateReviews/' + ${movie.id}}">Modifica recensioni</a>
+        <a th:href="@{'/admin/updateReviews/' + ${movie.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Modifica recensioni</button></a>
         <h2 style="color: #e50914">Recensioni:</h2>
         <div class="review" th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
         <div class="review" th:each="review : ${movie.reviews}">

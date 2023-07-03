@@ -74,6 +74,7 @@
       <p class="review-content" th:text="${review.text}"></p>
       <p class="review-content" th:text="${review.user.name}"></p>
     </div>
+    <a th:href="@{'/addReviewToMovie/' + ${movie.id}}">Aggiungi Recensione</a>
   </div>
 </div>
 

@@ -50,20 +50,18 @@
     </div>
   </div>
 </header>
-<h1 th:text="'Recensioni del film' + ${movie.title}"></h1>
-<div th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
-<ul>
-  <li th:each="review : ${movie.reviews}">
-    <span th:text="${review.title}"></span>
-    <span th:text="${review.text}"></span>
-    <div class="mt-5"><strong th:text="${review.rating}"></strong></div>
-    <span th:text="${review.user.name}"></span>
+<h1 th:text="'Recensioni del film ' + ${movie.title}"></h1>
+<a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button class="buttonModify" type="button">Salva</button></a>
+<div class="movie-reviews">
+  <div class="review"></div>
+  <div class="review" th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
+  <div class="review" th:each="review : ${movie.reviews}">
+    <p class="review-author" th:text="${review.title} + ' ' + ${review.rating} + '/5'"></p>
+    <p class="review-content" th:text="${review.text}"></p>
+    <p class="review-content" th:text="${review.user.name}"></p>
     <a th:href="@{'/admin/removeReviewFromMovie/'+ ${review.id}+'/'+${movie.id}}">Cancella</a>
-  </li>
-</ul>
-    <div>
-      <a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button type="button">Fine</button></a>
-    </div>
+  </div>
+</div>
 </body>
 
 </html>

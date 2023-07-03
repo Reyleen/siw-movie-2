@@ -101,12 +101,12 @@ public class MovieController {
         if (movie.getTitle()!=null && movie.getYear()!=null
                 && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
             this.movieService.updateMovie(toUpdate, movie, multipartFile);
-            byte[] photo = movie.getImage();
+            byte[] photo = toUpdate.getImage();
             if(photo != null) {
                 String image = java.util.Base64.getEncoder().encodeToString(photo);
                 model.addAttribute("image", image);
             }
-            model.addAttribute("movie", movie);
+            model.addAttribute("movie", toUpdate);
             return "admin/formUpdateMovie.html";
 
         } else {

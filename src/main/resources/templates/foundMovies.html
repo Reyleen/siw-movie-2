@@ -54,7 +54,7 @@
   <div class="movieGridItem" th:each="movie, iStat : ${movies}">
     <a th:href="@{/movie/{id}(id=${movie.id})}">
       <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
-      <h5 th:text="${movie.title} + '|' + ${movie.year}"></h5>
+      <h5 th:text="${movie.title} + ' | ' + ${movie.year}"></h5>
     </a>
   </div>
 </div>

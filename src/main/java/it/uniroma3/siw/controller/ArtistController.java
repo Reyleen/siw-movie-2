@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class ArtistController {
@@ -114,7 +113,11 @@ public class ArtistController {
 
     @GetMapping(value = "/admin/formUpdateArtist/{id}")
     public String manageMovie(@PathVariable("id") Long id, Model model) {
-
+        byte[] photo = this.artistRepository.findById(id).get().getImage();
+        if (photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
         model.addAttribute("artist", this.artistRepository.findById(id).get());
         model.addAttribute("artist2", new Artist());
         return "admin/formUpdateArtist.html";
@@ -127,14 +130,19 @@ public class ArtistController {
         if (artist.getName() != null && artist.getSurname() != null &&
                 !artistRepository.existsByNameAndSurname(artist.getName(), artist.getSurname())) {
             this.artistService.updateArtist(toUpdate, artist, multipartFile);
-            byte[] photo = artist.getImage();
+            byte[] photo = toUpdate.getImage();
             if (photo != null) {
                 String image = java.util.Base64.getEncoder().encodeToString(photo);
                 model.addAttribute("image", image);
             }
-            model.addAttribute("artist", artist);
+            model.addAttribute("artist", toUpdate);
             return "admin/updateArtist.html";
         } else {
+            byte[] photo = toUpdate.getImage();
+            if (photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
             model.addAttribute("messaggioErrore", "Questo artista esiste già");
             return "admin/formUpdateArtist.html";
         }

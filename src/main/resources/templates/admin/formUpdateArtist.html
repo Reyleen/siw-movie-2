@@ -53,51 +53,61 @@
         </div>
     </div>
 </header>
-<h1>Modifica Artista</h1>
+
 <form th:action="'/admin/updateArtist/' + ${artist.id}"  method="POST" th:object="${artist2}" enctype = "multipart/form-data" >
-    <div>
-        <span th:text="${messaggioErrore}">Errore</span>
+<div class="showMovie">
+    <h1>Modifica Artista</h1>
+    <div class="movie-details">
+        <img th:src="'data:image/jpeg;base64,' + ${image}" alt="Titolo Film"/>
+        <div>
+            <h2 th:text="${artist.name} + ' ' + ${artist.surname}" style="color: #e50914"></h2>
+            <span th:text="${messaggioErrore}">Errore</span>
+            <p>
+                <label class="movie-year">Nome:</label>
+                <input type="text" th:field="${artist2.name}"/>
+            </p>
+            <p>
+                <label class="movie-year">Cognome:</label>
+                <input type="text" th:field="${artist2.surname}"/>
+            </p>
+            <p>
+                <label class="movie-year">Data di nascita:</label>
+                <input type="text" th:field="${artist2.dateOfBirth}"/>
+            </p>
+            <p>
+                <label class="movie-year">Data di morte:</label>
+                <input type="text" th:field="${artist2.dateOfDeath}"/>
+            </p>
+            <p>
+                <label class="movie-info">Immagine:</label>
+                <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png"/></span>
+            </p>
+            <img id="thumbnail" alt="Logo Preview" |>
+            <span><button type="submit">Conferma</button></span>
+        </div>
     </div>
-    <div>
-        <label>Nome:</label> <span><input required type="text" th:field="${artist2.name}" /></span>
+    <div class="movie-reviews">
+        <div class="review"></div>
     </div>
-
-    <div>
-        <label>Cognome:</label> <span><input required type="text" th:field="${artist2.surname}" /></span>
-    </div>
-
-    <div>
-        <label>Data di nascita:</label> <span><input type="date" th:field="${artist2.dateOfBirth}" /></span>
-    </div>
-
-    <div>
-        <label>Data di morte (se mort*):</label> <span><input type="date" th:field="${artist2.dateOfDeath}" /></span>
-    </div>
-    <div>
-        <label>Immagine:</label>
-        <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
-    </div>
-    <div> <img id="thumbnail" alt="Logo Preview" |>
-    </div>
-    <script type = "text/javascript">
-        $(document).ready(function() {
-            $('#fileImage').change(function() {
-                showImageThumbnail(this);
-            });
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileImage').change(function () {
+            showImageThumbnail(this);
         });
+    });
 
-        function showImageThumbnail(fileInput) {
-            file = fileInput.files[0];
-            reader = new FileReader();
+    function showImageThumbnail(fileInput) {
+        file = fileInput.files[0];
+        reader = new FileReader();
 
-            reader.onload = function(e) {
-                $('#thumbnail').attr('src', e.target.result)
-            };
+        reader.onload = function (e) {
+            $('#thumbnail').attr('src', e.target.result)
+        };
 
-            reader.readAsDataURL(file);
-        }
-    </script>
-    <span><button type="submit">Modifica</button></span>
+        reader.readAsDataURL(file);
+    }
+</script>
 </form>
 </body>
 

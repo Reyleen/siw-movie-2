@@ -54,21 +54,12 @@ public class ReviewService {
             Movie movie = review.getMovie();
             review.getUser().getReviews().remove(review);
             review.getMovie().getReviews().remove(review);
+            review.getUser().getMoviesReviewed().remove(movie);
             this.movieRepository.save(movie);
             this.reviewRepository.delete(review);
         } catch (Exception e) {
             return;
         }
-    }
-
-    public Review saveReviewToUser(Long userId, Long reviewId) {
-        Review review = this.getReviewById(reviewId);
-        User user = this.userService.getUser(userId);
-        List<Review> reviews = user.getReviews();
-        reviews.add(review);
-        user.setReviews(reviews);
-        review.setUser(user);
-        return this.reviewRepository.save(review);
     }
 
     @Transactional

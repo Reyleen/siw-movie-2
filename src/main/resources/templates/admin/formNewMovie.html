@@ -1,32 +1,101 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Nuovo Film </title>
-    <link rel="stylesheet" href="/css/stile.css?version=3"/>
+    <title>
+        New Movie
+    </title>
+    <link rel="stylesheet" href="/css/reviewStyle.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 </head>
+
 <body>
-<div><a href="/"><img src="https://i.pinimg.com/564x/c3/d9/97/c3d997b22a3f64b65915851f30592371.jpg" width="5%" alt=""/> </a> </div>
-<h1> Nuovo Film </h1>
-<form th:action="@{/movies}" method="POST" th:object="${movie}">
-    <div>
-        <span th:text="${messaggioErrore}">Errore</span>
+<header>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+    </style>
+    <script>
+        function submitForm() {
+            var form = document.querySelector('form');
+            form.submit();
+        }
+    </script>
+    <div class="header-left">
+        <div class="logo">
+            <img src="/images/logoSIW2.png" width="50%" />
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="/">Home</a> </li>
+                <li><a href="/movie">Film</a></li>
+                <li><a href="/artist">Artisti</a></li>
+                <li>&#124</li>
+                <li><a href="/admin/manageMovies">Modifica Film</a></li>
+                <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
+            </ul>
+        </div>
     </div>
-    <div> Titolo:
-        <span>
-            <label>
-<input required type="text" th:field="${movie.title}"/>
-</label>
+    <div class="header-right">
+        <div class="search-bar">
+            <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+                <img src="/images/search-heart.svg">
+                <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
+            </form>
+        </div>
+    </div>
+    <div class="login">
+        <div th:if="${#request.userPrincipal}">
+            <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
+            <a href="/logout">Logout</a>
+        </div>
+        <div th:unless="${#request.userPrincipal}">
+            <a href="/login">Login</a>
+        </div>
+    </div>
+</header>
+<div class="login-container">
+    <img src="/images/logoSIW2.png" class="logo">
+    <h1>Aggiungi un film</h1>
+    <form class="formMovie" th:action="@{/admin/movie}" method="POST" th:object="${movie}" enctype = "multipart/form-data" >
+        <span th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
         </span>
-    </div>
-    <div>Anno:
-        <span><input required type="text" th:field="${movie.year}"/></span>
-    </div>
-    <div>URL immagine:
-        <span><input type="url" th:field="${movie.urlImage}"/></span>
-    </div>
-    <div>
-        <span><button type="submit">Conferma</button></span>
-    </div>
-</form>
+        <span th:text="${messaggioErrore}">Errore</span>
+        <input type="text" placeholder="Titolo" th:field="${movie.title}" style="font-family: 'Raleway', sans-serif" />
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+        <input type="text" placeholder="Anno" th:field="${movie.year}" style="font-family: 'Raleway', sans-serif" />
+        <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+        <div class="mb-3">
+            <input class="form-control" type="file" name="image" id="fileImage" accept="image/*"/>
+        </div>
+        <div> <img id="thumbnail" alt="Logo Preview"/></div>
+        <div>
+            <button type="submit">Conferma</button>
+        </div>
+    </form>
+</div>
+
+    <script type = "text/javascript">
+        $(document).ready(function() {
+            $('#fileImage').change(function() {
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#thumbnail').attr('src', e.target.result)
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
 </body>
+
 </html>

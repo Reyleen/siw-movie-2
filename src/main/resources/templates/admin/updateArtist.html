@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Artista</title>
-    <link rel="stylesheet" href="/css/stile.css"/>
+    <link rel="stylesheet" href="/css/stile.css" />
 </head>
 
 <body>
@@ -18,13 +18,16 @@
     </script>
     <div class="header-left">
         <div class="logo">
-            <img src="/images/logoSIW2.png" width="50%"/>
+            <img src="/images/logoSIW2.png" width="50%" />
         </div>
         <div class="menu">
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="/">Home</a> </li>
                 <li><a href="/movie">Film</a></li>
                 <li><a href="/artist">Artisti</a></li>
+                <li>&#124</li>
+                <li><a href="/admin/manageMovies">Modifica Film</a></li>
+                <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
             </ul>
         </div>
     </div>
@@ -32,8 +35,7 @@
         <div class="search-bar">
             <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
                 <img src="/images/search-heart.svg">
-                <input type="text" th:value="${title}" name="title" placeholder="Cerca film..."
-                       style="font-family: 'Raleway', sans-serif"/>
+                <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
             </form>
         </div>
     </div>
@@ -47,11 +49,15 @@
         </div>
     </div>
 </header>
+
+
 <div class="showMovie" th:if="${artist}">
-    <h1>Dettagli Artista</h1>
+    <h1>Modifica Artista</h1>
     <div class="movie-details">
         <img th:src="'data:image/jpeg;base64,' + ${image}" alt="Artista"/>
         <div>
+            <a th:href="@{'/admin/formUpdateArtist/' + ${artist.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Modifica</button></a>
+            <a th:href="@{'/admin/removeArtist' + '/' + ${artist.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Elimina</button></a>
             <h2 th:text="${artist.name} + ' ' + ${artist.surname}" style="color: #e50914"></h2>
             <p class="movie-year" th:text="'Anno di nascita:' + ${artist.dateOfBirth} ">2000</p>
             <p class="movie-year" th:if="${artist.dateOfDeath} ">
@@ -60,5 +66,7 @@
         </div>
     </div>
 </div>
+
+<div th:unless="${artist}">Non esiste</div>
 </body>
 </html>

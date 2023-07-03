@@ -3,30 +3,104 @@
 
 <head>
     <title>
-        SiwMovie - Homepage
+        SiwMovie2 - Homepage
     </title>
     <link rel="stylesheet" href="/css/stile.css" />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
 </head>
 
 <body>
 <header>
-    <div th:if="${#request.userPrincipal}">
-        <span th:text="${#request.userPrincipal.principal.username}"></span>
-        <a href="/logout">Logout</a>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+    </style>
+    <script>
+        function submitForm() {
+            var form = document.querySelector('form');
+            form.submit();
+        }
+    </script>
+    <div class="header-left">
+        <div class="logo">
+            <img src="/images/logoSIW2.png" width="50%" />
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="/">Home</a> </li>
+                <li><a href="/movie">Film</a></li>
+                <li><a href="/artist">Artisti</a></li>
+            </ul>
+         </div>
     </div>
-    <div th:unless="${#request.userPrincipal}">
-        <a href="/login">Login</a>
+    <div class="header-right">
+        <div class="search-bar">
+            <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+                <img src="/images/search-heart.svg">
+                <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
+            </form>
+        </div>
+    </div>
+    <div class="login">
+    <div th:if="${#request.userPrincipal}">
+                <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
+                <a href="/logout">Logout</a>
+            </div>
+            <div th:unless="${#request.userPrincipal}">
+                <a href="/login">Login</a>
+            </div>
     </div>
 </header>
-
-<div><img src="/images/logo-siw.png" width="50%" /></div>
-<h1>Consulta l'archivio</h1>
-<div>
-    <a href="/movie">Elenco Film</a>
+<div class="x">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="movie, iStat : ${movies}">
+                <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+                <h5 th:href="@{/movie/{id}(id=${movie.id})}" th:text="${movie.title}"></h5>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
 </div>
-<div>
-    <a href="/artist">Elenco Artisti</a>
+<div class="movieGrid">
+        <div class="movieGridItem" th:each="movie, iStat : ${movies}">
+            <a th:href="@{/movie/{id}(id=${movie.id})}">
+                <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
+                <h5 th:text="${movie.title}"></h5>
+            </a>
+        </div>
 </div>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        autoplay: true,
+        loop: true,
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
 </body>
 
 </html>

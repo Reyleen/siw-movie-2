@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Scelta attori</title>
+  <link rel="stylesheet" href="/css/stile.css" />
 </head>
+
 <body>
-$END$
+<header>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+  </style>
+  <script>
+    function submitForm() {
+      var form = document.querySelector('form');
+      form.submit();
+    }
+  </script>
+  <div class="header-left">
+    <div class="logo">
+      <img src="/images/logoSIW2.png" width="50%" />
+    </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/">Home</a> </li>
+        <li><a href="/movie">Film</a></li>
+        <li><a href="/artist">Artisti</a></li>
+        <li>&#124</li>
+        <li><a href="/admin/manageMovies">Modifica Film</a></li>
+        <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="search-bar">
+      <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+        <img src="/images/search-heart.svg">
+        <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
+      </form>
+    </div>
+  </div>
+  <div class="login">
+    <div th:if="${#request.userPrincipal}">
+      <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
+      <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${#request.userPrincipal}">
+      <a href="/login">Login</a>
+    </div>
+  </div>
+</header>
+<h1 th:text="'Attori del film ' + ${movie.title}"></h1>
+<div th:if="${movie.actors.isEmpty()}">Non ci sono attori per questo film</div>
+<ul>
+  <li th:each="actor : ${movie.actors}">
+    <span th:text="${actor.name}+' '+${actor.surname}"></span>
+    <a th:href="@{'/admin/removeActorFromMovie/'+ ${actor.id}+'/'+${movie.id}}">Cancella</a>
+  </li>
+</ul>
+<div>
+  Attori che si possono aggiungere:
+  <ul>
+    <li th:each="actor : ${actorsToAdd}">
+      <span th:text="${actor.name}+' '+${actor.surname}"></span>
+      <a th:href="@{'/admin/addActorToMovie/'+ ${actor.id}+'/'+${movie.id}}">Aggiungi</a>
+    </li>
+  </ul>
+    <div>
+      <a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button style="font-family: 'Raleway', sans-serif">Salva</button></a>
+    </div>
+</div>
 </body>
+
 </html>

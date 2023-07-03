@@ -1,0 +1,176 @@
+body {
+    background-image: image-set('/images/backgroundAggiungi.jpg');
+    background-size: cover;
+    font-family: 'Raleway', sans-serif;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    row-gap: 200px;
+}
+
+* {
+    font-family: 'Raleway', sans-serif !important;;
+}
+
+.login-container {
+    background-color: rgba(51, 51, 51, 0.8);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    color: #fff !important;
+    margin-bottom: 20px;
+}
+
+.formMovie {
+    max-width: 300px;
+}
+
+#thumbnail {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+form input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+form button {
+    width: 80%;
+    padding: 10px;
+    background-color: #e50914;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #b4060c;
+}
+
+.signup-link {
+    margin-top: 20px;
+    color: #fff;
+    display: flex;
+}
+
+.signup-link span {
+    margin-right: 5px;
+}
+
+.signup-link a {
+    color: #e50914;
+}
+
+form span{
+    font-size:  13px;
+    margin-bottom: 10px;
+    color: #e50914;
+    display: flex;
+}
+
+header {
+    background-color: rgba(62, 59, 59, 0.8);
+    color: white;
+    margin-bottom: 0.5em;
+    padding: 0.2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    flex-grow: 2; /* Permette all'elemento di occupare lo spazio disponibile */
+}
+
+.menu {
+    margin-right: auto; /* Spinge l'elemento a sinistra verso destra */
+}
+
+.login {
+    text-align: right;
+    margin-left: auto; /* Spinge l'elemento "login" tutto a destra */
+    margin-right: 10px;
+    width: 200px;
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+}
+
+.menu ul li {
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.search-bar > form {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.search-bar input[type="text"] {
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 1px solid lavender;
+    font-size: 13px;
+    outline: none;
+}
+
+header a {
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+}

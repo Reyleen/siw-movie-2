@@ -3,45 +3,30 @@
 
 <head>
   <title>
-    SiwMovie - Login
+    SiwMovie2 - Login
   </title>
-  <link rel="stylesheet" href="/css/stile.css" />
+  <link rel="stylesheet" href="/css/loginStyle.css" />
 </head>
 
 <body>
-<header>
-  <div th:if="${#request.userPrincipal}">
-    <span th:text="${#request.userPrincipal.principal.username}"></span>
-    <a href="/logout">Logout</a>
-  </div>
-  <div th:unless="${#request.userPrincipal}">
-    <a href="/login">Login</a>
-  </div>
-</header>
-
-<div>
-  <a href="/"><img src="/images/logo-siw.png" width="50%"/></a>
-</div>
-<h1>Login</h1>
-<form th:action="@{/login}" method="POST">
-  <div>
-    <span>Username:</span>
-    <span><input name="username" type="text" required /></span>
-  </div>
-  <div>
-    <span>Password:</span>
-    <span><input name="password" type="password" required /></span>
-  </div>
-  <div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+</style>
+<div class="login-container">
+  <img src="/images/logoSIW2.png" class="logo">
+    <h1>Accedi</h1>
+  <form th:action="@{/login}" method="POST">
+    <input name="username" type="text" placeholder="username" style="font-family: 'Raleway', sans-serif" required />
+    <input name="password" type="password" placeholder="password" style="font-family: 'Raleway', sans-serif" required />
     <span th:if="${param.error != null}">Username o password errati</span>
-  </div>
-  <div>
-    <span><button type="submit">Login</button></span>
-  </div>
-</form>
-<div>
-  <a th:href="@{/register}" th:text="Registrati">Registrati</a>
+
+    <button type="submit" style="font-family: 'Raleway', sans-serif">Login</button>
+  </form>
+    <div class="signup-link">
+        Non hai un account? <a th:href="@{/register}"> Registrati</a>
+    </div>
 </div>
+
 </body>
 
 </html>

@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>
+    SiwMovie2 - Sign Up
+  </title>
+  <link rel="stylesheet" href="/css/loginStyle.css" />
 </head>
 <body>
-$END$
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+</style>
+<div class="login-container">
+  <img src="/images/logoSIW2.png" class="logo">
+  <h1>Registrati</h1>
+  <form th:action="@{/register}" method="POST">
+    <input type="text" placeholder="username" required th:field="${credentials.username}" style="font-family: 'Raleway', sans-serif"/>
+    <span th:if="${#fields.hasErrors('credentials.username')}" th:errors="${credentials.username}"
+          th:style="'color:red'">
+			</span>
+    <input name="password" type="password" placeholder="password" th:field="${credentials.password}" style="font-family: 'Raleway', sans-serif" required />
+    <span th:if="${#fields.hasErrors('credentials.password')}" th:errors="${credentials.password}"
+          th:style="'color:red'">
+			</span>
+    <input type="text" placeholder="nome" required th:field="${user.name}" style="font-family: 'Raleway', sans-serif"/>
+    <span th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}" th:style="'color:red'">
+			</span>
+    <input type="text" placeholder="cognome" required th:field="${user.surname}" style="font-family: 'Raleway', sans-serif"/>
+    <span th:if="${#fields.hasErrors('user.surname')}" th:errors="${user.surname}" th:style="'color:red'">
+			</span>
+    <input type="text" placeholder="email" required th:field="${user.email}" style="font-family: 'Raleway', sans-serif"/>
+    <span th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}" th:style="'color:red'">
+			</span>
+    <button type="submit" style="font-family: 'Raleway', sans-serif">Registrati</button>
+  </form>
+    <div class="signup-link">
+        Hai un account? <a th:href="@{/login}"> Login</a>
+    </div>
+</div>
+
 </body>
+
+
 </html>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Scelta regista</title>
+  <title>Recensioni</title>
   <link rel="stylesheet" href="/css/stile.css" />
 </head>
 
@@ -50,15 +50,18 @@
     </div>
   </div>
 </header>
-
-<h1 th:text="'Regista per il film ' + ${movie.title}"></h1>
-<div th:if="${artists.isEmpty()}">Non ci sono registi nel sistema</div>
-<ul>
-  <li th:each="artist : ${artists}">
-    <a th:href="@{'/admin/setDirectorToMovie/'+ ${artist.id}+'/'+${movie.id}}"
-       th:text="${artist.name} + ' ' + ${artist.surname}">Steven Spielberg</a>
-  </li>
-</ul>
+<h1 th:text="'Recensioni del film ' + ${movie.title}"></h1>
+<a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button class="buttonModify" type="button">Salva</button></a>
+<div class="movie-reviews">
+  <div class="review"></div>
+  <div class="review" th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
+  <div class="review" th:each="review : ${movie.reviews}">
+    <p class="review-author" th:text="${review.title} + ' ' + ${review.rating} + '/5'"></p>
+    <p class="review-content" th:text="${review.text}"></p>
+    <p class="review-content" th:text="${review.user.name}"></p>
+    <a th:href="@{'/admin/removeReviewFromMovie/'+ ${review.id}+'/'+${movie.id}}">Cancella</a>
+  </div>
+</div>
 </body>
 
 </html>

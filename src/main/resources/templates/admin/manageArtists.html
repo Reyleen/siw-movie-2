@@ -27,8 +27,8 @@
         <li><a href="/movie">Film</a></li>
         <li><a href="/artist">Artisti</a></li>
         <li>&#124</li>
-        <li><a href="/admin/indexMovie">Modifica Film</a></li>
-        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
+        <li><a href="/admin/manageMovies">Modifica Film</a></li>
+        <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
       </ul>
     </div>
   </div>
@@ -52,6 +52,9 @@
 </header>
 
 <h1 style="color: #e50914">Modifica Artisti</h1>
+<div>
+  <a href="/admin/formNewArtist"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Inserisci artista</button></a>
+</div>
 <div th:if="${artists==null || artists.isEmpty()}">Non ci sono artisti nel sistema</div>
 <div class="artistGrid">
   <div class="artistGridItem" th:each="artist, iStat : ${artists}">

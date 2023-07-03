@@ -84,6 +84,11 @@ public class MovieController {
 
     @GetMapping(value="/admin/formMovieUpdate/{movieId}")
     public String manageMovie(@PathVariable("movieId") Long id ,Model model) {
+        byte[] photo = movieRepository.findById(id).get().getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
         model.addAttribute("movie", this.movieRepository.findById(id).get());
         model.addAttribute("movie2", new Movie());
         return "admin/formUpdateMovie2.html";
@@ -96,10 +101,20 @@ public class MovieController {
         if (movie.getTitle()!=null && movie.getYear()!=null
                 && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
             this.movieService.updateMovie(toUpdate, movie, multipartFile);
+            byte[] photo = movie.getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
             model.addAttribute("movie", movie);
             return "admin/formUpdateMovie.html";
 
         } else {
+            byte[] photo = movieRepository.findById(id).get().getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
             model.addAttribute("messaggioErrore", "Questo film esiste già");
             model.addAttribute("movie", movieRepository.findById(id).get());
             return "admin/formUpdateMovie2.html";
@@ -109,6 +124,11 @@ public class MovieController {
     @GetMapping (value="/admin/formUpdateMovie/{id}")
     public String formUpdateMovie(@PathVariable("id") Long id, Model model) {
         model.addAttribute("movie", movieRepository.findById(id).get());
+        byte[] photo = movieRepository.findById(id).get().getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
         return "admin/formUpdateMovie.html";
     }
 
@@ -142,8 +162,15 @@ public class MovieController {
         Artist director = this.artistRepository.findById(directorId).get();
         Movie movie = this.movieRepository.findById(movieId).get();
         movie.setDirector(director);
+        List<Movie> directors = director.getDirectorOf();
+        directors.add(movie);
+        this.artistRepository.save(director);
         this.movieRepository.save(movie);
-
+        byte[] photo = movie.getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
         model.addAttribute("movie", movie);
         return "admin/formUpdateMovie.html";
     }
@@ -219,7 +246,10 @@ public class MovieController {
         Artist actor = this.artistRepository.findById(actorId).get();
         Set<Artist> actors = movie.getActors();
         actors.add(actor);
+        Set<Movie> movies = actor.getActorOf();
+        movies.add(movie);
         this.movieRepository.save(movie);
+        this.artistRepository.save(actor);
 
         List<Artist> actorsToAdd = actorsToAdd(movieId);
 
@@ -288,6 +318,9 @@ public class MovieController {
         Artist actor = this.artistRepository.findById(actorId).get();
         Set<Artist> actors = movie.getActors();
         actors.remove(actor);
+        Set<Movie> movies = actor.getActorOf();
+        movies.remove(movie);
+        this.artistRepository.save(actor);
         this.movieRepository.save(movie);
 
         List<Artist> actorsToAdd = actorsToAdd(movieId);

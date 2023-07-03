@@ -29,8 +29,8 @@
                 <li><a href="/movie">Film</a></li>
                 <li><a href="/artist">Artisti</a></li>
                 <li>&#124</li>
-                <li><a href="/admin/indexMovie">Modifica Film</a></li>
-                <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
+                <li><a href="/admin/manageMovies">Modifica Film</a></li>
+                <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
             </ul>
         </div>
     </div>
@@ -54,45 +54,45 @@
     </div>
 </header>
 
-<h1>Modifica Film</h1>
-<div th:if="${movie}">
-    <div>
-        <span th:text="${movie.title}">Up!</span>
-        <span th:text="'(' + ${movie.year} + ')'">2000</span>
-        <a th:href="@{'/admin/formMovieUpdate/' + ${movie.id}}">Modifica</a>
-    </div>
-    <div th:if="${movie.director}">
-        <span>Regista: </span><span th:text="${movie.director.name} + ' ' + ${movie.director.surname}">Steven
-				Spielberg</span>
-        <a th:href="@{'/admin/addDirector/' + ${movie.id}}">Modifica regista</a>
-    </div>
-    <div th:unless="${movie.director}">
-        <a th:href="@{'/admin/addDirector/' + ${movie.id}}">Aggiungi regista</a>
-    </div>
-
-    <div>
-        <span>Attori: </span>
-        <div th:each="actor: ${movie.actors}">
-            <span th:text="${actor.name} + ' ' + ${actor.surname}">Al Pacino</span>
-        </div>
-        <a th:href="@{'/admin/updateActors/' + ${movie.id}}">
-            <button type="button">Modifica</button>
-        </a>
+<div class="showMovie" th:if="${movie}">
+    <h1>Modifica Film</h1>
+    <div class="movie-details">
+        <img th:src="'data:image/jpeg;base64,' + ${image}" alt="Titolo Film"/>
         <div>
-            <span>Recensioni </span>
-            <div th:each="review: ${movie.reviews}">
-                <span th:text="${review.user.name}">Mario</span>
-                <span th:text="${review.text}">Bellissimo</span>
-                <span th:text="${review.rating}">5</span>
-            </div>
-            <a th:href="@{'/admin/updateReviews/' + ${movie.id}}">
-                <button type="button">Modifica</button>
-            </a>
+            <a th:href="@{'/admin/formMovieUpdate/' + ${movie.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Modifica</button></a>
+            <a th:href="@{'/admin/removeMovie' + '/' + ${movie.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Elimina</button></a>
+            <h2 th:text="${movie.title}" style="color: #e50914"></h2>
+            <p class ="movie-year" th:text="'Anno di uscita:' + ${movie.year} ">2000</p>
+            <p class ="movie-info" th:if="${movie.director}"> Regista:
+                <span th:text="${movie.director.name} + ' ' +${movie.director.surname}"></span>
+                <a th:href="@{'/admin/addDirector/' + ${movie.id}}">Modifica regista</a>
+            </p>
+            <p class ="movie-info" th:unless="${movie.director}">
+                <a th:href="@{'/admin/addDirector/' + ${movie.id}}">Aggiungi regista</a>
+            </p>
+            <p th:if="${movie.actors}" class="movie-info">Attori:
+                <span th:each="actor : ${movie.actors}">
+                <span th:text="${actor.name}+' '+${actor.surname}+' '"></span></span>
+                <a th:href="@{'/admin/updateActors/' + ${movie.id}}">Modifica attori</a>
+            </p>
+            <p class="movie-info" th:unless="${movie.actors}">
+                <a th:href="@{'/admin/updateActors/' + ${movie.id}}">Aggiungi attori</a>
+            </p>
         </div>
-        <a th:href="@{'/admin/removeMovie' + '/' + ${movie.id}}">Elimina Film</a>
+    </div>
+    <div class="movie-reviews">
+        <div class="review"></div>
+        <a th:href="@{'/admin/updateReviews/' + ${movie.id}}">Modifica recensioni</a>
+        <h2 style="color: #e50914">Recensioni:</h2>
+        <div class="review" th:if="${movie.reviews.isEmpty()}">Non ci sono recensioni per questo film</div>
+        <div class="review" th:each="review : ${movie.reviews}">
+            <p class="review-author" th:text="${review.title} + ' ' + ${review.rating} + '/5'"></p>
+            <p class="review-content" th:text="${review.text}"></p>
+            <p class="review-content" th:text="${review.user.name}"></p>
+        </div>
     </div>
 </div>
-    <div th:unless="${movie}">Film non esistente</div>
+<div th:unless="${movie}">Film non esistente</div>
 </body>
 
 </html>

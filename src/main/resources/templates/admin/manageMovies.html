@@ -27,8 +27,8 @@
         <li><a href="/movie">Film</a></li>
         <li><a href="/artist">Artisti</a></li>
         <li>&#124</li>
-        <li><a href="/admin/indexMovie">Modifica Film</a></li>
-        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
+        <li><a href="/admin/manageMovies">Modifica Film</a></li>
+        <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
       </ul>
     </div>
   </div>
@@ -51,6 +51,9 @@
   </div>
 </header>
 <h1>Aggiorna film</h1>
+<div style=" color: #ffffff">
+  <a href="/admin/formNewMovie"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Inserisci film</button></a>
+</div>
 <div th:if="${movies.isEmpty()}">Non ci sono film nel sistema</div>
 <div class="movieGrid">
   <div class="movieGridItem" th:each="movie, iStat : ${movies}">

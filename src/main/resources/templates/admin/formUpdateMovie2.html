@@ -2,97 +2,105 @@
 <html>
 
 <head>
-  <title>
-    Modifica Film
-  </title>
-  <link rel="stylesheet" href="/css/stile.css" />
+    <title>
+        Modifica Film
+    </title>
+    <link rel="stylesheet" href="/css/stile.css"/>
 </head>
 
 <body>
 <header>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
-  </style>
-  <script>
-    function submitForm() {
-      var form = document.querySelector('form');
-      form.submit();
-    }
-  </script>
-  <div class="header-left">
-    <div class="logo">
-      <img src="/images/logoSIW2.png" width="50%" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+    </style>
+    <script>
+        function submitForm() {
+            var form = document.querySelector('form');
+            form.submit();
+        }
+    </script>
+    <div class="header-left">
+        <div class="logo">
+            <img src="/images/logoSIW2.png" width="50%"/>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/movie">Film</a></li>
+                <li><a href="/artist">Artisti</a></li>
+                <li>&#124</li>
+                <li><a href="/admin/manageMovies">Modifica Film</a></li>
+                <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="menu">
-      <ul>
-        <li><a href="/">Home</a> </li>
-        <li><a href="/movie">Film</a></li>
-        <li><a href="/artist">Artisti</a></li>
-        <li>&#124</li>
-        <li><a href="/admin/indexMovie">Modifica Film</a></li>
-        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
-      </ul>
+    <div class="header-right">
+        <div class="search-bar">
+            <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
+                <img src="/images/search-heart.svg">
+                <input type="text" th:value="${title}" name="title" placeholder="Cerca film..."
+                       style="font-family: 'Raleway', sans-serif"/>
+            </form>
+        </div>
     </div>
-  </div>
-  <div class="header-right">
-    <div class="search-bar">
-      <form th:action="@{/searchMovies}" method="post" onsubmit="event.preventDefault(); submitForm();">
-        <img src="/images/search-heart.svg">
-        <input type="text" th:value="${title}" name="title" placeholder="Cerca film..." style="font-family: 'Raleway', sans-serif"/>
-      </form>
+    <div class="login">
+        <div th:if="${#request.userPrincipal}">
+            <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
+            <a href="/logout">Logout</a>
+        </div>
+        <div th:unless="${#request.userPrincipal}">
+            <a href="/login">Login</a>
+        </div>
     </div>
-  </div>
-  <div class="login">
-    <div th:if="${#request.userPrincipal}">
-      <span th:text="${#request.userPrincipal.principal.username}">Menù</span>
-      <a href="/logout">Logout</a>
-    </div>
-    <div th:unless="${#request.userPrincipal}">
-      <a href="/login">Login</a>
-    </div>
-  </div>
 </header>
-<h1>Modifica Film</h1>
-<form th:action="'/admin/formUpdateMovie/' + ${movie.id}"  method="POST" th:object="${movie2}" enctype = "multipart/form-data" >
-  <div>
-    <span th:text="${messaggioErrore}">Errore</span>
-  </div>
+<form th:action="'/admin/formUpdateMovie/' + ${movie.id}" method="POST" th:object="${movie2}"
+      enctype="multipart/form-data">
+    <div class="showMovie" th:if="${movie}">
+        <h1>Modifica Film</h1>
+        <div class="movie-details">
+            <img th:src="'data:image/jpeg;base64,' + ${image}" alt="Titolo Film"/>
+            <div>
+                <h2 th:text="${movie.title}" style="color: #e50914"></h2>
+                <span th:text="${messaggioErrore}">Errore</span>
+                <p>
+                    <label class="movie-year">Titolo:</label>
+                    <input type="text" th:field="${movie2.title}"/>
+                </p>
+                <p>
+                    <label class="movie-year">Anno:</label>
+                    <input type="text" th:field="${movie2.year}"/>
+                </p>
+                <p>
+                    <label class="movie-info">Immagine:</label>
+                    <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png"/></span>
+                </p>
+                <img id="thumbnail" alt="Logo Preview" |>
+                <span><button type="submit">Conferma</button></span>
+            </div>
+        </div>
+        <div class="movie-reviews">
+            <div class="review"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#fileImage').change(function () {
+                showImageThumbnail(this);
+            });
+        });
 
-  <div>
-    <label>Titolo:</label>
-    <span><input type="text" th:field="${movie2.title}" /></span>
-  </div>
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
 
-  <div>
-    <label>Anno:</label> <span><input type="text" th:field="${movie2.year}" /></span>
-  </div>
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result)
+            };
 
-  <div>
-    <label>Immagine:</label>
-    <span><input type="file" name="image" id="fileImage" accept="image/jpeg, image/png" /></span>
-  </div>
-  <div> <img id="thumbnail" alt="Logo Preview" |>
-  </div>
-  <script type = "text/javascript">
-    $(document).ready(function() {
-      $('#fileImage').change(function() {
-        showImageThumbnail(this);
-      });
-    });
-
-    function showImageThumbnail(fileInput) {
-      file = fileInput.files[0];
-      reader = new FileReader();
-
-      reader.onload = function(e) {
-        $('#thumbnail').attr('src', e.target.result)
-      };
-
-      reader.readAsDataURL(file);
-    }
-  </script>
-  <span><button type="submit">Conferma</button></span>
+            reader.readAsDataURL(file);
+        }
+    </script>
 </form>
 </body>
 

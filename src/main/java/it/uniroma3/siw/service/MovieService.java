@@ -95,6 +95,8 @@ public class MovieService {
         Artist actor = this.artistService.getActorById(actorId);
         Set<Artist> actors = movie.getActors();
         actors.remove(actor);
+        Set<Movie> movies = actor.getActorOf();
+        movies.remove(movie);
         this.movieRepository.save(movie);
         return movie;
     }
@@ -115,6 +117,8 @@ public class MovieService {
         for (Artist actor : actors) {
             actor.getActorOf().remove(movie);
         }
+        Artist director = movie.getDirector();
+        director.getDirectorOf().remove(movie);
         Set<Review> reviews = movie.getReviews();
         for (Review review : reviews) {
             review.setMovie(null);

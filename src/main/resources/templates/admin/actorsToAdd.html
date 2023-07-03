@@ -27,8 +27,8 @@
         <li><a href="/movie">Film</a></li>
         <li><a href="/artist">Artisti</a></li>
         <li>&#124</li>
-        <li><a href="/admin/indexMovie">Modifica Film</a></li>
-        <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
+        <li><a href="/admin/manageMovies">Modifica Film</a></li>
+        <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
       </ul>
     </div>
   </div>
@@ -66,10 +66,10 @@
       <a th:href="@{'/admin/addActorToMovie/'+ ${actor.id}+'/'+${movie.id}}">Aggiungi</a>
     </li>
   </ul>
-  <div>
     <div>
-      <a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button type="button">Fine</button></a>
+      <a th:href="@{'/admin/formUpdateMovie/'+ ${movie.id}}"><button style="font-family: 'Raleway', sans-serif">Salva</button></a>
     </div>
+</div>
 </body>
 
 </html>

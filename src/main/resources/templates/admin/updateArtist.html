@@ -26,8 +26,8 @@
                 <li><a href="/movie">Film</a></li>
                 <li><a href="/artist">Artisti</a></li>
                 <li>&#124</li>
-                <li><a href="/admin/indexMovie">Modifica Film</a></li>
-                <li><a href="/admin/indexArtist">Modifica Artisti</a></li>
+                <li><a href="/admin/manageMovies">Modifica Film</a></li>
+                <li><a href="/admin/manageArtists">Modifica Artisti</a></li>
             </ul>
         </div>
     </div>
@@ -51,18 +51,21 @@
 </header>
 
 <h1>Modifica Artista</h1>
-<div th:if="${artist}">
-    <span th:text="${artist.name} + ' ' + ${artist.surname}">Dino Risi</span>
-    <span th:text="'(' + ${artist.dateOfBirth} + ')'">20/20/2000</span>
-    <div th:if="${artist.dateOfDeath}">
-        <span th:text="'(' + ${artist.dateOfDeath} + ')'">20/20/2000</span>
+<div class="showMovie" th:if="${artist}">
+    <div class="movie-details">
+        <img th:src="'data:image/jpeg;base64,' + ${image}" alt="Artista"/>
+        <div>
+            <a th:href="@{'/admin/formUpdateArtist/' + ${artist.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Modifica</button></a>
+            <a th:href="@{'/admin/removeArtist' + '/' + ${artist.id}}"><button class="buttonModify" style="font-family: 'Raleway', sans-serif">Elimina</button></a>
+            <h2 th:text="${artist.name} + ' ' + ${artist.surname}" style="color: #e50914"></h2>
+            <p class="movie-year" th:text="'Anno di nascita:' + ${artist.dateOfBirth} ">2000</p>
+            <p class="movie-year" th:if="${artist.dateOfDeath} ">
+                <span th:text="'Anno di morte:' + ${artist.dateOfDeath}">2000</span>
+            </p>
+        </div>
     </div>
-    <span><img width="5%" th:src="'data:image/jpeg;base64,' + ${image}"/></span>
-    <a th:href="@{'/admin/formUpdateArtist/' + ${artist.id}}">
-        <button type="button">Modifica</button>
-    </a>
-    <a th:href="@{'/admin/removeArtist' + '/' + ${artist.id}}">Rimuovi</a>
 </div>
+
 <div th:unless="${artist}">Non esiste</div>
 </body>
 </html>

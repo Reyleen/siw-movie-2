@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import it.uniroma3.siw.model.*;
 import it.uniroma3.siw.repository.ReviewRepository;
+import it.uniroma3.siw.service.AuthService;
 import it.uniroma3.siw.service.MovieService;
 import it.uniroma3.siw.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class MovieController {
     private ReviewService reviewService;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private CredentialsService credentialsService;
 
     @GetMapping(value="/admin/formNewMovie")
@@ -65,7 +69,6 @@ public class MovieController {
     public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,  Model model,
                            @RequestParam("image")MultipartFile multipartFile) throws IOException {
 
-        //this.movieValidator.validate(movie, bindingResult);
         if (movie.getTitle()!=null && movie.getYear()!=null
                 && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())){
             this.movieService.createNewMovie(movie, multipartFile);
@@ -134,12 +137,8 @@ public class MovieController {
 
     @GetMapping(value="/admin/manageMovies")
     public String manageMovies(Model model) {
-        List<Movie> movies = new ArrayList<>();
-        movieRepository.findAll().forEach(movies::add);
-        String[] images = new String[movies.size()];
-        for(int i = 0; i < movies.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
-        }
+        List<Movie> movies = this.movieService.getAllTheMovies();
+        String[] images = this.movieService.getAllTheMovieImages(movies);
         model.addAttribute("images", images);
         model.addAttribute("movies", this.movieRepository.findAll());
         return "admin/manageMovies.html";
@@ -156,11 +155,7 @@ public class MovieController {
 
         Artist director = this.artistRepository.findById(directorId).get();
         Movie movie = this.movieRepository.findById(movieId).get();
-        movie.setDirector(director);
-        List<Movie> directors = director.getDirectorOf();
-        directors.add(movie);
-        this.artistRepository.save(director);
-        this.movieRepository.save(movie);
+        this.movieService.addDirectorToMovie(director, movie);
         byte[] photo = movie.getImage();
         if(photo != null) {
             String image = java.util.Base64.getEncoder().encodeToString(photo);
@@ -191,19 +186,10 @@ public class MovieController {
 
     @GetMapping("/movie")
     public String getMovies(Model model) {
-		/*
-    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-*/
-        List<Movie> movies = new ArrayList<>();
-        movieRepository.findAll().forEach(movies::add);
-        String[] images = new String[movies.size()];
-        for(int i = 0; i < movies.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
-        }
+        List<Movie> movies = this.movieService.getAllTheMovies();
+        String[] images = this.movieService.getAllTheMovieImages(movies);
         model.addAttribute("images", images);
         model.addAttribute("movies", this.movieRepository.findAll());
-        //model.addAttribute("user", credentials.getUser());
         return "movies.html";
     }
 
@@ -214,13 +200,9 @@ public class MovieController {
 
     @PostMapping("/searchMovies")
     public String searchMovies(Model model, @RequestParam String title) {
-        model.addAttribute("movies", this.movieRepository.findByTitle(title));
-        List<Movie> movies = new ArrayList<>();
-        movieRepository.findByTitle(title).forEach(movies::add);
-        String[] images = new String[movies.size()];
-        for(int i = 0; i < movies.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
-        }
+        model.addAttribute("movies", this.movieService.getMoviesByTitle(title));
+        List<Movie> movies = this.movieService.getMoviesWithTitle(title);
+        String[] images = this.movieService.getAllTheMovieImages(movies);
         model.addAttribute("images", images);
         return "foundMovies.html";
     }

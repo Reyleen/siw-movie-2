@@ -5,11 +5,12 @@ import javax.validation.Valid;
 import it.uniroma3.siw.controller.validator.CredentialValidator;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.repository.MovieRepository;
+import it.uniroma3.siw.service.AuthService;
+import it.uniroma3.siw.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +24,6 @@ import it.uniroma3.siw.service.CredentialsService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Controller
@@ -37,6 +37,12 @@ public class AuthenticationController {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private MovieService movieService;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping(value = "/register")
     public String showRegisterForm (Model model) {
@@ -52,12 +58,8 @@ public class AuthenticationController {
 
     @GetMapping(value = "/")
     public String index(Model model) {
-        List<Movie> movies = new ArrayList<>();
-        movieRepository.findAll().forEach(movies::add);
-        String[] images = new String[movies.size()];
-        for(int i = 0; i < movies.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
-        }
+        List<Movie> movies = this.movieService.getAllTheMovies();
+        String[] images = this.movieService.getAllTheMovieImages(movies);
         model.addAttribute("images", images);
         model.addAttribute("movies", movieRepository.findAll());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,9 +67,7 @@ public class AuthenticationController {
             return "index.html";
         }
         else {
-            UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-            if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
+            if(authService.checkIfAdmin()) {
                 return "admin/indexAdmin.html";
             }
         }
@@ -76,17 +76,11 @@ public class AuthenticationController {
 
     @GetMapping(value = "/success")
     public String defaultAfterLogin(Model model) {
-        List<Movie> movies = new ArrayList<>();
-        movieRepository.findAll().forEach(movies::add);
-        String[] images = new String[movies.size()];
-        for(int i = 0; i < movies.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(movies.get(i).getImage());
-        }
+        List<Movie> movies = this.movieService.getAllTheMovies();
+        String[] images = this.movieService.getAllTheMovieImages(movies);
         model.addAttribute("images", images);
         model.addAttribute("movies", movieRepository.findAll());
-        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-        if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
+        if(authService.checkIfAdmin()) {
             return "admin/indexAdmin.html";
         }
         return "index.html";

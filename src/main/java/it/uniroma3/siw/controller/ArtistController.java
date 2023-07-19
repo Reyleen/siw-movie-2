@@ -1,10 +1,9 @@
 package it.uniroma3.siw.controller;
 
 import it.uniroma3.siw.model.Artist;
-import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.repository.ArtistRepository;
-import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.service.ArtistService;
+import it.uniroma3.siw.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +25,9 @@ public class ArtistController {
     @Autowired
     ArtistService artistService;
 
+    @Autowired
+    AuthService authService;
+
     @GetMapping(value = "/admin/formNewArtist")
     public String formNewArtist(Model model) {
         model.addAttribute("artist", new Artist());
@@ -34,12 +36,8 @@ public class ArtistController {
 
     @GetMapping(value = "/admin/manageArtists")
     public String manageArtist(Model model) {
-        List<Artist> artists = new ArrayList<>();
-        artistRepository.findAll().forEach(artists::add);
-        String[] images = new String[artists.size()];
-        for(int i = 0; i < artists.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(artists.get(i).getImage());
-        }
+        List<Artist> artists = this.artistService.getAllTheArtists();
+        String[] images = this.artistService.getAllTheImages(artists);
         model.addAttribute("images", images);
         model.addAttribute("artists", this.artistRepository.findAll());
         return "admin/manageArtists.html";
@@ -83,12 +81,8 @@ public class ArtistController {
 
     @GetMapping("/artist")
     public String getArtists(Model model) {
-        List<Artist> artists = new ArrayList<>();
-        artistRepository.findAll().forEach(artists::add);
-        String[] images = new String[artists.size()];
-        for(int i = 0; i < artists.size(); i++) {
-            images[i] = java.util.Base64.getEncoder().encodeToString(artists.get(i).getImage());
-        }
+        List<Artist> artists = this.artistService.getAllTheArtists();
+        String[] images = this.artistService.getAllTheImages(artists);
         model.addAttribute("images", images);
         model.addAttribute("artists", this.artistRepository.findAll());
         return "artists.html";

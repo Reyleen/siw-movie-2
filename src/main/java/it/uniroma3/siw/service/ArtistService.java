@@ -1,8 +1,7 @@
 package it.uniroma3.siw.service;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -58,21 +57,6 @@ public class ArtistService {
     }
 
     @Transactional
-    public Iterable<Artist> findActorsNotInMovie(Long movieId) {
-        return this.artistRepository.findActorsNotInMovie(movieId);
-    }
-
-    @Transactional
-    public boolean existsByNameAndSurname(String name, String surname) {
-        return artistRepository.existsByNameAndSurname(name, surname);
-    }
-
-    @Transactional
-    public void addArtist(@Valid Artist artist) {
-        this.artistRepository.save(artist);
-    }
-
-    @Transactional
     public void deleteArtist(Long artistId) {
         Artist artist = this.getActorById(artistId);
         Set<Movie> movies = artist.getActorOf();
@@ -86,5 +70,20 @@ public class ArtistService {
         this.artistRepository.delete(artist);
     }
 
+    @Transactional
+    public List<Artist> getAllTheArtists() {
+        List<Artist> artists = new ArrayList<>();
+        artistRepository.findAll().forEach(artists::add);
+        return artists;
+    }
+
+    @Transactional
+    public String[] getAllTheImages(List<Artist> artists) {
+        String[] images = new String[artists.size()];
+        for(int i = 0; i < artists.size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(artists.get(i).getImage());
+        }
+        return images;
+    }
 
 }

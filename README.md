@@ -1,5 +1,6 @@
 
 SIWMovie
+
 Per il progetto ho utilizzato la libreria di Swiper: [DOCS](https://swiperjs.com/swiper-api)
 ---
 Casi d'uso:
@@ -138,18 +139,18 @@ Casi d'uso:
 
 
 **UC13: Mostra film - Attore primario: Utente Non Registrato**
-  2. Il sistema mostra la pagina home
-  3. L'utente sceglie l'operazione di "Film"
-  4. Il sistema mostra una lista di film
-  5. L'utente sceglie il film
-  6. Il sistema mostra i dettagli del film scelto
+  1. Il sistema mostra la pagina home
+  2. L'utente sceglie l'operazione di "Film"
+  3. Il sistema mostra una lista di film
+  4. L'utente sceglie il film
+  5. Il sistema mostra i dettagli del film scelto
 
 **UC13: Mostra Artista - Attore primario: Utente Non Registrato**
-  2. Il sistema mostra la pagina home
-  3. L'utente sceglie l'operazione di "Artisti"
-  4. Il sistema mostra una lista di artisti
-  5. L'utente sceglie l'artista
-  6. Il sistema mostra i dettagli dell'artista scelto
+  1. Il sistema mostra la pagina home
+  2. L'utente sceglie l'operazione di "Artisti"
+  3. Il sistema mostra una lista di artisti
+  4. L'utente sceglie l'artista
+  5. Il sistema mostra i dettagli dell'artista scelto
 
 
  

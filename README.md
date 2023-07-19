@@ -1,7 +1,8 @@
 
 SIWMovie
-
+---
 Per il progetto ho utilizzato la libreria di Swiper: [DOCS](https://swiperjs.com/swiper-api)
+
 ---
 Casi d'uso:
 ---

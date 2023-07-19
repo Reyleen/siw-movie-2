@@ -64,7 +64,7 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide" th:each="movie, iStat : ${movies}">
         <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
-        <h5 th:href="@{/movie/{id}(id=${movie.id})}" th:text="${movie.title}"></h5>
+        <h5 ><a th:text="${movie.title}" th:href="@{/movie/{id}(id=${movie.id})}"></a> </h5>
       </div>
     </div>
     <div class="swiper-pagination"></div>

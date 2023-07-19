@@ -6,9 +6,11 @@ import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -121,6 +123,22 @@ public class MovieService {
         return movies;
     }
 
+    @Transactional
+    public Movie addImages(Movie movie, MultipartFile multipartFile) throws IOException {
+      byte[] image = multipartFile.getBytes();
+        ArrayList<byte[]> images = movie.getImages();
+        images.add(image);
+        return this.movieRepository.save(movie);
+    }
+
+    @Transactional
+    public String[] getImages(Movie movie) {
+        String[] images = new String[movie.getImages().size()];
+        for(int i = 0; i < movie.getImages().size(); i++) {
+            images[i] = java.util.Base64.getEncoder().encodeToString(movie.getImages().get(i));
+        }
+        return images;
+    }
 }
 
 

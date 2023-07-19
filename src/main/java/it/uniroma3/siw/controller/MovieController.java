@@ -2,6 +2,7 @@ package it.uniroma3.siw.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -77,6 +78,8 @@ public class MovieController {
                 String image = java.util.Base64.getEncoder().encodeToString(photo);
                 model.addAttribute("image", image);
             }
+            String[] images = this.movieService.getImages(movie);
+            model.addAttribute("images", images);
             model.addAttribute("movie", movie);
             return "movie.html";
         } else {
@@ -109,6 +112,8 @@ public class MovieController {
                 String image = java.util.Base64.getEncoder().encodeToString(photo);
                 model.addAttribute("image", image);
             }
+            String[] images = this.movieService.getImages(movie);
+            model.addAttribute("images", images);
             model.addAttribute("movie", toUpdate);
             return "admin/formUpdateMovie.html";
 
@@ -132,6 +137,23 @@ public class MovieController {
             String image = java.util.Base64.getEncoder().encodeToString(photo);
             model.addAttribute("image", image);
         }
+        String[] images = this.movieService.getImages(movieRepository.findById(id).get());
+        model.addAttribute("images", images);
+        return "admin/formUpdateMovie.html";
+    }
+
+    @PostMapping(value="/admin/addImages/{movieId}")
+    public String addImages(@PathVariable("movieId") Long movieId, @RequestParam("image") MultipartFile multipartFile, Model model) throws IOException {
+        Movie movie = this.movieRepository.findById(movieId).get();
+        this.movieService.addImages(movie, multipartFile);
+        model.addAttribute("movie", this.movieService.addImages(movie, multipartFile));
+        byte[] photo = movie.getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
+        String[] images = this.movieService.getImages(movie);
+        model.addAttribute("images", images);
         return "admin/formUpdateMovie.html";
     }
 
@@ -161,6 +183,8 @@ public class MovieController {
             String image = java.util.Base64.getEncoder().encodeToString(photo);
             model.addAttribute("image", image);
         }
+        String[] images = this.movieService.getImages(movie);
+        model.addAttribute("images", images);
         model.addAttribute("movie", movie);
         return "admin/formUpdateMovie.html";
     }
@@ -170,41 +194,6 @@ public class MovieController {
         model.addAttribute("artists", artistRepository.findAll());
         model.addAttribute("movie", movieRepository.findById(id).get());
         return "admin/directorsToAdd.html";
-    }
-
-    @GetMapping("/movie/{id}")
-    public String getMovie(@PathVariable("id") Long id, Model model) {
-        Movie movie = this.movieRepository.findById(id).get();
-        byte[] photo = movie.getImage();
-        if(photo != null) {
-            String image = java.util.Base64.getEncoder().encodeToString(photo);
-            model.addAttribute("image", image);
-        }
-        model.addAttribute("movie", movie);
-        return "movie.html";
-    }
-
-    @GetMapping("/movie")
-    public String getMovies(Model model) {
-        List<Movie> movies = this.movieService.getAllTheMovies();
-        String[] images = this.movieService.getAllTheMovieImages(movies);
-        model.addAttribute("images", images);
-        model.addAttribute("movies", this.movieRepository.findAll());
-        return "movies.html";
-    }
-
-    @GetMapping("/formSearchMovies")
-    public String formSearchMovies() {
-        return "formSearchMovies.html";
-    }
-
-    @PostMapping("/searchMovies")
-    public String searchMovies(Model model, @RequestParam String title) {
-        model.addAttribute("movies", this.movieService.getMoviesByTitle(title));
-        List<Movie> movies = this.movieService.getMoviesWithTitle(title);
-        String[] images = this.movieService.getAllTheMovieImages(movies);
-        model.addAttribute("images", images);
-        return "foundMovies.html";
     }
 
     @GetMapping("/admin/updateActors/{id}")
@@ -235,40 +224,6 @@ public class MovieController {
 
         return "admin/actorsToAdd.html";
     }
-
-    @GetMapping("/addReviewToMovie/{movieId}")
-    public String addReviewToMovie(@PathVariable("movieId") Long movieId, Model model) {
-        Movie movie = this.movieRepository.findById(movieId).get();
-        model.addAttribute("movie", movie);
-        model.addAttribute("review", new Review());
-        return "formNewReview.html";
-    }
-
-    @PostMapping("/review/{movieId}")
-    public String newReview(@Valid @ModelAttribute("review") Review review, @PathVariable("movieId") Long movieId, BindingResult bindingResult, Model model) {
-        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-        User user = credentials.getUser();
-        Movie m = movieRepository.findById(movieId).get();
-        Set<Movie>movies = user.getMoviesReviewed();
-        if(!movies.contains(m)){
-            Review newReview = this.reviewService.newReview(review, movieId);
-            Movie movie = this.movieService.addReviewToMovie(movieId, newReview.getId());
-            byte[] photo = movie.getImage();
-            if(photo != null) {
-                String image = java.util.Base64.getEncoder().encodeToString(photo);
-                model.addAttribute("image", image);
-            }
-            model.addAttribute(newReview);
-            model.addAttribute(movie);
-            return "movie.html";
-        } else {
-            model.addAttribute("messaggioErrore", "Hai già scritto una recensione per questo film!");
-            model.addAttribute("movie", this.movieService.getMovieById(movieId));
-            return "formNewReview.html";
-        }
-    }
-
 
     @GetMapping("/admin/updateReviews/{movieId}")
     public String updateReviews(@PathVariable("movieId") Long movieId, Model model) {
@@ -306,6 +261,78 @@ public class MovieController {
         model.addAttribute("actorsToAdd", actorsToAdd);
 
         return "admin/actorsToAdd.html";
+    }
+
+    @GetMapping("/movie/{id}")
+    public String getMovie(@PathVariable("id") Long id, Model model) {
+        Movie movie = this.movieRepository.findById(id).get();
+        byte[] photo = movie.getImage();
+        if(photo != null) {
+            String image = java.util.Base64.getEncoder().encodeToString(photo);
+            model.addAttribute("image", image);
+        }
+        String[] images = this.movieService.getImages(movie);
+        model.addAttribute("images", images);
+        model.addAttribute("movie", movie);
+        return "movie.html";
+    }
+
+    @GetMapping("/movie")
+    public String getMovies(Model model) {
+        List<Movie> movies = this.movieService.getAllTheMovies();
+        String[] images = this.movieService.getAllTheMovieImages(movies);
+        model.addAttribute("images", images);
+        model.addAttribute("movies", this.movieRepository.findAll());
+        return "movies.html";
+    }
+
+    @GetMapping("/formSearchMovies")
+    public String formSearchMovies() {
+        return "formSearchMovies.html";
+    }
+
+    @PostMapping("/searchMovies")
+    public String searchMovies(Model model, @RequestParam String title) {
+        model.addAttribute("movies", this.movieService.getMoviesByTitle(title));
+        List<Movie> movies = this.movieService.getMoviesWithTitle(title);
+        String[] images = this.movieService.getAllTheMovieImages(movies);
+        model.addAttribute("images", images);
+        return "foundMovies.html";
+    }
+
+    @GetMapping("/addReviewToMovie/{movieId}")
+    public String addReviewToMovie(@PathVariable("movieId") Long movieId, Model model) {
+        Movie movie = this.movieRepository.findById(movieId).get();
+        model.addAttribute("movie", movie);
+        model.addAttribute("review", new Review());
+        return "formNewReview.html";
+    }
+
+    @PostMapping("/review/{movieId}")
+    public String newReview(@Valid @ModelAttribute("review") Review review, @PathVariable("movieId") Long movieId, BindingResult bindingResult, Model model) {
+        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+        User user = credentials.getUser();
+        Movie m = movieRepository.findById(movieId).get();
+        Set<Movie>movies = user.getMoviesReviewed();
+        if(!movies.contains(m)){
+            Review newReview = this.reviewService.newReview(review, movieId);
+            Movie movie = this.movieService.addReviewToMovie(movieId, newReview.getId());
+            byte[] photo = movie.getImage();
+            if(photo != null) {
+                String image = java.util.Base64.getEncoder().encodeToString(photo);
+                model.addAttribute("image", image);
+            }
+            model.addAttribute(newReview);
+            model.addAttribute(movie);
+            String[] images = this.movieService.getImages(movie);
+            model.addAttribute("images", images);
+            return "movie.html";
+        } else {
+            model.addAttribute("messaggioErrore", "Hai già scritto una recensione per questo film!");
+            model.addAttribute("movie", this.movieService.getMovieById(movieId));
+            return "formNewReview.html";
+        }
     }
 
     private List<Artist> actorsToAdd(Long movieId) {

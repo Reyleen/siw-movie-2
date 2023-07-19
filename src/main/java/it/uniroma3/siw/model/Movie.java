@@ -2,9 +2,7 @@ package it.uniroma3.siw.model;
 
 import org.springframework.lang.Nullable;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -30,6 +28,8 @@ public class Movie {
 
     private byte[] image;
 
+    private ArrayList<byte[]> images;
+
     @ManyToOne
     private Artist director;
 
@@ -42,6 +42,7 @@ public class Movie {
     public Movie() {
         this.actors = new HashSet<>();
         this.reviews = new HashSet<>();
+        this.images = new ArrayList<>();
     }
 
 
@@ -75,6 +76,16 @@ public class Movie {
 
     public void setImage(@Nullable byte[] image) {
         this.image = image;
+    }
+
+    public ArrayList<byte[]> getImages() {
+        if(images == null)
+            return new ArrayList<>();
+        return images;
+    }
+
+    public void setImages(ArrayList<byte[]> images) {
+        this.images = images;
     }
 
     public Artist getDirector() {

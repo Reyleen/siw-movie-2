@@ -72,14 +72,6 @@
     <div class="swiper-button-prev"></div>
   </div>
 </div>
-<div class="movieGrid">
-  <div class="movieGridItem" th:each="movie, iStat : ${movies}">
-    <a th:href="@{/movie/{id}(id=${movie.id})}">
-      <img th:src="'data:image/jpeg;base64,' + ${images[iStat.index]}" th:alt="${movie.title}"/>
-      <h5 th:text="${movie.title}"></h5>
-    </a>
-  </div>
-</div>
 <script>
   var swiper = new Swiper(".mySwiper", {
     autoplay: true,

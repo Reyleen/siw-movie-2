@@ -1,7 +1,5 @@
 package it.uniroma3.siw.service;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Review;
-import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.ReviewRepository;
 
@@ -27,24 +24,11 @@ public class ReviewService {
     private MovieRepository movieRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private CredentialsService credentialsService;
-
-    @Transactional
-    public void addReview(Review review) {
-        this.reviewRepository.save(review);
-    }
 
     @Transactional
     public Review getReviewById(Long id) {
         return this.reviewRepository.findById(id).get();
-    }
-
-    @Transactional
-    public List<Review> getReviewsByRateAsc() {
-        return this.reviewRepository.findByOrderByRatingAsc();
     }
 
     @Transactional

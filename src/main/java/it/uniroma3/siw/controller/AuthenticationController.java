@@ -2,7 +2,6 @@ package it.uniroma3.siw.controller;
 
 import javax.validation.Valid;
 
-import it.uniroma3.siw.controller.validator.CredentialValidator;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.service.AuthService;
@@ -22,7 +21,6 @@ import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CredentialsService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,9 +29,6 @@ public class AuthenticationController {
 
     @Autowired
     private CredentialsService credentialsService;
-
-    @Autowired
-    private CredentialValidator credentialsValidator;
 
     @Autowired
     private MovieRepository movieRepository;

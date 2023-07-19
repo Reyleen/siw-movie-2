@@ -128,6 +128,7 @@ public class MovieService {
       byte[] image = multipartFile.getBytes();
         ArrayList<byte[]> images = movie.getImages();
         images.add(image);
+        movie.setImages(images);
         return this.movieRepository.save(movie);
     }
 

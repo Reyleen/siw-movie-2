@@ -1,8 +1,9 @@
-#SIWMovie
-
+---
+SIWMovie
+---
 Per il progetto ho utilizzato la libreria di Swiper: [DOCS](https://swiperjs.com/swiper-api)
 ---
-##Casi d'uso:
+Casi d'uso:
 ---
 <details>
 <summary>UC1: Inserimento Film - Attore primario: Amministratore</summary>

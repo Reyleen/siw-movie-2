@@ -155,7 +155,7 @@ Casi d'uso:
 
 Modello di dominio
 ---
-
+![image](blob:https://web.telegram.org/37097b03-a676-438f-832b-a589f699d04b)
 
  
 

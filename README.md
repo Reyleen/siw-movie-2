@@ -153,9 +153,6 @@ Casi d'uso:
   4. L'utente sceglie l'artista
   5. Il sistema mostra i dettagli dell'artista scelto
 
-Modello di dominio
----
-[image](blob:https://web.telegram.org/37097b03-a676-438f-832b-a589f699d04b)
 
  
 

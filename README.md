@@ -153,6 +153,9 @@ Casi d'uso:
   4. L'utente sceglie l'artista
   5. Il sistema mostra i dettagli dell'artista scelto
 
+Modello di dominio
+---
+
 
  
 
